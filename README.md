@@ -2,9 +2,11 @@
 
 [Live website](https://gary.ac.cn/RiDEX/)
 
-A buildless research page: an editorial artwork hero, the supplied four-task training
-comparison PDF, and matched Base / DiffusionNFT / RiDEx image comparisons.
+A buildless research page: an editorial artwork hero, the abstract, the supplied
+four-task training comparison PDF, matched Base / DiffusionNFT / RiDEx image
+comparisons, and a citation.
 No vector method explainer, duplicated result tables, or frontend framework.
+Page sequence: hero, abstract, results, generations, citation.
 
 ## Hero
 
@@ -19,14 +21,14 @@ header. Inter and italic Playfair Display are self-hosted with their OFL license
 - `assets/training_comparison.pdf` is the supplied paper figure, unchanged.
   The WebP preview is rendered directly from the PDF without redrawing data.
 - Individual native-resolution images replace compressed paper-plate crops.
-  Every triplet uses the same prompt, seed, resolution, 40-step Euler sampler
-  and CFG 4.5. Click an image to inspect it and switch methods.
+  Every triplet matches prompt, seed, resolution, 40-step Euler sampler and CFG
+  4.5 across methods. These curated examples illustrate selected outcomes; they
+  do not establish universal wins. Click an image to inspect it and switch methods.
 - `assets/comparison_manifest.json` records settings and checkpoint identities.
   Examples are selected, not aggregate win-rate evidence.
-- The gallery contains 7 visually curated matched triplets (21 images), with
-  square, landscape and portrait filters and a clickable image wall. After review
-  of all 52 candidate sets, six new comparisons join one retained counting example;
-  ambiguous or worse cases are not included merely to increase the count.
+- The main integration will include at least 10 matched examples per reward task,
+  with square, landscape and portrait filters and a clickable image wall. Examples
+  are selected for inspection, not as aggregate performance evidence.
   Native formats include 1:1, 3:2, 2:3, 16:9 and 9:16. The original square examples
   retain their native 512/1024 resolution.
   No AI upscaling, cropping or retouching is applied to comparison images.

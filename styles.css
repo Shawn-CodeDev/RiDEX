@@ -20,7 +20,7 @@ h2{font-size:34px;line-height:1.2;font-weight:550;margin:0}
 .text-link:hover{color:var(--accent)}
 .training-figure{margin:0}.training-figure img{width:100%;height:auto}.training-figure>a{display:block}
 .training-figure figcaption{font-size:12px;color:var(--muted);margin-top:18px;text-align:center}
-.results{padding-bottom:64px}.comparisons{border-top:1px solid var(--line)}.section-note{font-size:13px;color:var(--muted);margin:0 0 3px}
+.results{padding-bottom:64px}.comparisons{border-top:1px solid var(--line)}
 .gallery-toolbar{display:flex;justify-content:space-between;align-items:center;gap:20px;border-bottom:1px solid var(--line);padding:0 0 18px}
 .task-tabs{display:flex;gap:5px;flex-wrap:wrap}
 .task-tabs button{background:transparent;border:1px solid transparent;padding:9px 19px;font-size:13px;border-radius:5px;color:#a2aaa2;min-height:40px}
@@ -46,12 +46,12 @@ h2{font-size:34px;line-height:1.2;font-weight:550;margin:0}
 .example-thumbnails button[aria-pressed=true]{border-color:#829881;color:var(--ink)}
 .example-thumbnails img{width:42px;height:42px;object-fit:contain;border-radius:2px;flex:0 0 auto}.example-thumbnails span{font-size:11px;line-height:1.3;min-width:0;overflow-wrap:anywhere}
 .gallery-wall-section{margin-top:48px;border-top:1px solid var(--line);padding-top:20px}.gallery-wall-heading{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px}.gallery-wall-heading h3{font-size:15px}.gallery-wall-heading span{font-size:11px;color:var(--muted)}.gallery-wall{columns:4;column-gap:16px}.wall-item{display:inline-flex;flex-direction:column;align-items:stretch;gap:6px;width:100%;break-inside:avoid;margin:0 0 16px;min-width:0;padding:0;border:0;background:transparent;text-align:left;color:var(--ink)}.wall-item img{width:100%;height:auto;aspect-ratio:auto;object-fit:contain;background:#f3f4f1;border-radius:2px}.wall-item span{font-size:11px;line-height:1.35;color:var(--muted);overflow-wrap:anywhere}.wall-item:hover span{color:var(--accent)}.wall-item:focus-visible{outline-offset:3px}
-.research{border-top:1px solid var(--line);padding-top:65px}.research-intro{display:grid;grid-template-columns:1fr 1.35fr;gap:80px;align-items:start;margin-bottom:40px}
-.research-intro>p{color:#bdc4bc;font-size:17px;line-height:1.8;margin:3px 0 0}
-.abstract{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:20px 0}.abstract summary{display:flex;justify-content:space-between;cursor:pointer;font-size:15px;list-style:none}
-.abstract summary::-webkit-details-marker{display:none}.abstract summary span{font-size:20px;line-height:1}.abstract[open] summary span{transform:rotate(45deg)}
-.abstract p{max-width:900px;font-size:15px;color:#bdc4bc;line-height:1.9;margin:20px 0 3px}
-.citation-heading{display:flex;align-items:center;justify-content:space-between;gap:24px;margin:34px 0 15px}h3{font-size:17px;font-weight:550;margin:0}
+.abstract{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding-block:44px}
+.abstract .eyebrow{margin-bottom:12px}.abstract h2{font-size:28px}
+.abstract-text{max-width:900px;font-size:20px;color:#bdc4bc;line-height:1.75;margin:20px 0 0}
+.comparisons .section-heading{margin-bottom:22px}.comparisons .section-heading .eyebrow{margin:0}
+.citation{border-top:1px solid var(--line)}
+.citation-heading{display:flex;align-items:center;justify-content:space-between;gap:24px;margin:0 0 15px}h3{font-size:17px;font-weight:550;margin:0}
 pre{background:#1b211c;padding:24px;margin:0;font-size:12px;line-height:1.8;overflow-x:auto;border-radius:5px;color:#d0d8cf;tab-size:2}
 footer{display:flex;align-items:center;justify-content:space-between;gap:24px;border-top:1px solid var(--line);padding:32px 5%;font-size:12px;color:var(--muted)}
 footer .wordmark{color:var(--ink);font-size:26px}footer p{margin:0}
@@ -63,12 +63,13 @@ dialog::backdrop{background:rgba(0,0,0,.82)}.dialog-toolbar{display:flex;align-i
 .dialog-methods button[aria-pressed=true]{background:#c5dbc2;color:#152019}
 @media(max-width:1000px){
   .gallery-wall{columns:3}
-  .section{padding-block:58px}h2{font-size:29px}.research-intro{gap:40px}.comparison-grid{gap:10px}
+  .section{padding-block:58px}h2{font-size:29px}.abstract-text{font-size:18px}.comparison-grid{gap:10px}
   #example-meta{white-space:normal;max-width:120px;text-align:right;flex-shrink:0}
 }
 @media(max-width:680px){
-  .section{width:92%;padding-block:44px}.section-heading{display:block;margin-bottom:24px}h2{font-size:27px}
-  .section-heading .text-link{margin-top:16px;font-size:12px}.section-heading .section-note{margin-top:12px;font-size:12px}
+  .section{width:92%;padding-block:44px}.section-heading{display:block;margin-bottom:24px}h2{font-size:27px}.abstract h2{font-size:24px}
+  .abstract{padding-block:36px}.abstract-text{font-size:16px;line-height:1.75}
+  .section-heading .text-link{margin-top:16px;font-size:12px}
   .training-figure figcaption{text-align:left;font-size:10px}
   .gallery-toolbar{gap:12px;padding-bottom:14px;flex-wrap:wrap}.task-tabs{gap:2px}.task-tabs button{font-size:12px;padding:8px 12px}.format-filter{padding-top:10px;gap:2px}.format-filter button{padding:5px 8px}
   .gallery-paging{margin-left:auto;gap:8px}.gallery-paging .icon-button{width:30px;height:30px;font-size:17px}
@@ -78,8 +79,7 @@ dialog::backdrop{background:rgba(0,0,0,.82)}.dialog-toolbar{display:flex;align-i
   .zoom-icon{width:25px;height:25px;bottom:5px;right:5px;font-size:15px}
   .example-thumbnails{grid-template-columns:repeat(var(--thumbnail-mobile-count),minmax(0,1fr));margin-top:16px;gap:6px}.example-thumbnails img{width:32px;height:40px}.example-thumbnails span{font-size:10px;padding:0}.example-thumbnails button{gap:5px;padding:3px;align-items:center}
   .gallery-wall-section{margin-top:34px;padding-top:16px}.gallery-wall{columns:2;column-gap:10px}.wall-item{margin-bottom:12px}.wall-item span{font-size:10px}
-  .research-intro{display:block;margin-bottom:25px}
-  .research-intro>p{font-size:15px;line-height:1.8;margin-top:22px}.abstract p{font-size:14px}pre{font-size:10px;padding:17px}
+  pre{font-size:10px;padding:17px}
   footer{gap:16px;font-size:10px;padding-block:25px}footer p{max-width:140px;text-align:center}
   dialog{padding:15px;max-width:96vw}.dialog-toolbar p{font-size:11px}.dialog-methods button{padding:8px 12px}
 }

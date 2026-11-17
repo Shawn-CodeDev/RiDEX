@@ -26,10 +26,10 @@
   <a class="skip-link" href="#results">Skip to results</a>
   <header class="site-header" id="site-header">
     <a class="wordmark" href="#top" aria-label="RiDEx home">RiDEx<span aria-hidden="true">.</span></a>
-    <nav class="desktop-nav" aria-label="Main navigation"><a href="#top" aria-current="location">Overview</a><a href="#results">Results</a><a href="#comparisons">Generations</a><a href="#research">Research</a></nav>
+    <nav class="desktop-nav" aria-label="Main navigation"><a href="#top" aria-current="location">Overview</a><a href="#abstract">Abstract</a><a href="#results">Results</a><a href="#comparisons">Generations</a></nav>
     <a class="repo-link" href="https://github.com/Shawn-CodeDev/RiDEX" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
     <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Open navigation" title="Open navigation" aria-expanded="false" aria-controls="mobile-nav"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path class="menu-lines" d="M4 8h16M4 16h16"/><path class="menu-cross" d="m6 6 12 12M18 6 6 18"/></svg></button>
-    <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation" hidden><a href="#top">Overview</a><a href="#results">Results</a><a href="#comparisons">Generations</a><a href="#research">Research</a><a href="https://github.com/Shawn-CodeDev/RiDEX" target="_blank" rel="noopener noreferrer">GitHub ↗</a></nav>
+    <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation" hidden><a href="#top">Overview</a><a href="#abstract">Abstract</a><a href="#results">Results</a><a href="#comparisons">Generations</a><a href="https://github.com/Shawn-CodeDev/RiDEX" target="_blank" rel="noopener noreferrer">GitHub ↗</a></nav>
   </header>
   <main>
     <section class="hero" id="top" aria-labelledby="hero-title">
@@ -47,12 +47,17 @@
       </div>
       <div class="hero-bottom"><a class="hero-button" href="#results">Explore results <span aria-hidden="true">↗</span></a></div>
     </section>
+    <section class="abstract section" id="abstract" aria-labelledby="abstract-title">
+      <p class="eyebrow">01 / Abstract</p>
+      <h2 id="abstract-title">Abstract</h2>
+      <p class="abstract-text">Reward-based diffusion post-training relies on diverse samples, but not every change is relevant to the target reward. RiDEx concentrates local exploration in reward-relevant subspaces of the denoising velocity field. Conditional residuals or differentiable reward gradients propose directions; equal-and-opposite perturbations at the same generation state measure their terminal reward response. The resulting signed contrast supervises the explored velocity coordinates, while all generated images contribute to global DiffusionNFT learning. We evaluate alignment and preference objectives on Stable Diffusion 3.5 Medium.</p>
+    </section>
     <section class="results section" id="results" aria-labelledby="results-title">
-      <div class="section-heading"><div><p class="eyebrow">01 / Training</p><h2 id="results-title">Better rewards. Less compute.</h2></div><a class="text-link" href="assets/training_comparison.pdf" target="_blank" rel="noopener noreferrer">Full-resolution PDF <span aria-hidden="true">↗</span></a></div>
+      <div class="section-heading"><div><p class="eyebrow">02 / Training</p><h2 id="results-title">Better rewards. Less compute.</h2></div><a class="text-link" href="assets/training_comparison.pdf" target="_blank" rel="noopener noreferrer">Full-resolution PDF <span aria-hidden="true">↗</span></a></div>
       <figure class="training-figure"><a href="assets/training_comparison.pdf" target="_blank" rel="noopener noreferrer" aria-label="Open the four-task training comparison PDF"><picture><source media="(max-width:680px)" srcset="assets/training_comparison_mobile.webp" width="1800" height="2148"><img src="assets/training_comparison.webp" width="3600" height="1074" alt="Training curves comparing RiDEx and DiffusionNFT on GenEval, OCR, HPSv2 and PickScore, plotted against H200 GPU hours." loading="lazy"></picture></a><figcaption>Stable Diffusion 3.5 Medium · Matched reward targets · Training cost in H200 GPU hours</figcaption></figure>
     </section>
     <section class="comparisons section" id="comparisons" aria-labelledby="comparisons-title">
-      <div class="section-heading"><div><p class="eyebrow">02 / Generations</p><h2 id="comparisons-title">The difference, side by side.</h2></div><p class="section-note">Same prompt. Same seed. Standard inference.</p></div>
+      <div class="section-heading"><h2 class="eyebrow" id="comparisons-title">03 / Generations</h2></div>
       <div class="gallery-toolbar">
         <div class="task-tabs" role="tablist" aria-label="Reward task"><button id="tab-geneval" role="tab" aria-selected="true" aria-controls="comparison-panel" data-task="geneval">GenEval</button><button id="tab-ocr" role="tab" aria-selected="false" aria-controls="comparison-panel" tabindex="-1" data-task="ocr">OCR</button><button id="tab-hpsv2" role="tab" aria-selected="false" aria-controls="comparison-panel" tabindex="-1" data-task="hpsv2">HPSv2</button><button id="tab-pickscore" role="tab" aria-selected="false" aria-controls="comparison-panel" tabindex="-1" data-task="pickscore">PickScore</button></div>
         <div class="gallery-paging"><button type="button" class="icon-button" id="previous-example" aria-label="Previous example" title="Previous example">←</button><span id="example-count" aria-live="polite">00 / 00</span><button type="button" class="icon-button" id="next-example" aria-label="Next example" title="Next example">→</button></div>
@@ -62,10 +67,8 @@
       <div class="gallery-wall-section"><div class="gallery-wall-heading"><h3>More generations</h3><span id="wall-count"></span></div><div class="gallery-wall" id="gallery-wall" aria-label="All generated RiDEx examples"></div></div>
       <noscript><p>Enable JavaScript to switch examples. <a href="assets/comparison_manifest.json">View the image manifest</a>.</p></noscript>
     </section>
-    <section class="research section" id="research" aria-labelledby="research-title">
-      <div class="research-intro"><div><p class="eyebrow">03 / The idea</p><h2 id="research-title">Useful directions.<br>State-matched learning.</h2></div><p>RiDEx uses conditional residuals or reward gradients to propose exploration directions. Opposite interventions from the same diffusion state reveal their terminal reward effect. That contrast supplies local training credit, alongside global DiffusionNFT learning.</p></div>
-      <details class="abstract"><summary>Abstract <span aria-hidden="true">+</span></summary><p>Reward-based diffusion post-training relies on diverse samples, but not every change is relevant to the target reward. RiDEx concentrates local exploration in reward-relevant subspaces of the denoising velocity field. Conditional residuals or differentiable reward gradients propose directions; equal-and-opposite perturbations at the same generation state measure their terminal reward response. The resulting signed contrast supervises the explored velocity coordinates, while all generated images contribute to global DiffusionNFT learning. We evaluate alignment and preference objectives on Stable Diffusion 3.5 Medium.</p></details>
-      <div class="citation-heading"><h3>Cite this work</h3><button class="text-link" type="button" id="copy-citation">Copy BibTeX <span aria-hidden="true">⧉</span></button></div>
+    <section class="citation section" id="citation" aria-labelledby="citation-title">
+      <div class="citation-heading"><h2 id="citation-title">Citation</h2><button class="text-link" type="button" id="copy-citation">Copy BibTeX <span aria-hidden="true">⧉</span></button></div>
       <pre id="bibtex">@misc{yan2026ridex,
   title={RiDEx: Reward-Informed Directional Exploration
          for Diffusion Reinforcement Learning},
