@@ -3,24 +3,24 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light">
+  <meta name="color-scheme" content="dark">
   <title>RiDEx | Reward-Informed Directional Exploration</title>
-  <meta name="description" content="Reward-informed exploration for diffusion reinforcement learning. Research, training results, and matched image comparisons from the RiDEx team.">
+  <meta name="description" content="RiDEx: Reward-Informed Directional Exploration for Diffusion Reinforcement Learning. Research, training results, and matched image comparisons.">
   <meta property="og:title" content="RiDEx: Reward-Informed Directional Exploration">
   <meta property="og:description" content="Explore what matters to the reward. Learn from the same-state feedback.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://shawn-codedev.github.io/RiDEX/">
-  <meta property="og:image" content="https://shawn-codedev.github.io/RiDEX/assets/hero.webp">
-  <meta name="theme-color" content="#111915">
+  <link rel="canonical" href="https://gary.ac.cn/RiDEX/">
+  <meta property="og:url" content="https://gary.ac.cn/RiDEX/">
+  <meta property="og:image" content="https://gary.ac.cn/RiDEX/assets/hero-art.webp">
+  <meta name="theme-color" content="#101512">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="preload" as="image" href="assets/examples/hps_alpine_base.webp">
-  <link rel="preload" as="image" href="assets/examples/hps_alpine_ridex.webp">
+  <link rel="preload" as="image" href="assets/hero-art.webp">
   <link rel="preload" as="font" type="font/ttf" href="assets/fonts/PlayfairDisplay-Italic.ttf" crossorigin>
-  <link rel="stylesheet" href="styles.css?v=5">
-  <link rel="stylesheet" href="hero.css?v=4">
+  <link rel="stylesheet" href="styles.css?v=6">
+  <link rel="stylesheet" href="hero.css?v=5">
   <script src="assets/examples.js?v=4" defer></script>
   <script src="script.js?v=4" defer></script>
-  <script src="hero.js?v=4" defer></script>
+  <script src="navigation.js?v=5" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#results">Skip to results</a>
@@ -32,26 +32,20 @@
     <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation" hidden><a href="#top">Overview</a><a href="#results">Results</a><a href="#comparisons">Generations</a><a href="#research">Research</a><a href="https://github.com/Shawn-CodeDev/RiDEX" target="_blank" rel="noopener noreferrer">GitHub ↗</a></nav>
   </header>
   <main>
-    <section class="hero" id="top" aria-labelledby="hero-title" data-view="spotlight">
-      <div class="hero-scene hero-zoom" aria-hidden="true"><img class="hero-image" src="assets/examples/hps_alpine_base.webp" alt="" width="1024" height="1024" fetchpriority="high"></div>
-      <div class="hero-reveal-layer" id="hero-reveal" aria-hidden="true"><div class="hero-scene hero-zoom"><img class="hero-image" src="assets/examples/hps_alpine_ridex.webp" alt="" width="1024" height="1024" fetchpriority="high"></div></div>
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <img class="hero-art hero-image" src="assets/hero-art.webp" alt="" width="1672" height="941" fetchpriority="high" aria-hidden="true">
       <div class="hero-shade" aria-hidden="true"></div>
       <div class="hero-content">
-        <p class="hero-kicker hero-anim hero-fade">Diffusion reinforcement learning</p>
-        <h1 id="hero-title" class="hero-anim hero-rise">RiDEx</h1>
-        <p class="hero-tagline hero-anim hero-rise">Explore what matters.</p>
-        <p class="paper-title hero-anim hero-fade">Reward-Informed Directional Exploration<br>for Diffusion Reinforcement Learning</p>
-        <div class="team hero-anim hero-fade" aria-label="Authors and affiliations">
+        <h1 id="hero-title">RiDEx</h1>
+        <p class="hero-tagline">Explore what matters.</p>
+        <p class="paper-title">Reward-Informed Directional Exploration<br>for Diffusion Reinforcement Learning</p>
+        <div class="team" aria-label="Authors and affiliations">
           <p class="authors"><span>Song Yan<sup>1</sup></span><span>Chenfeng Wang<sup>1,2</sup></span><span>Wei Zhai<sup>1,†</sup></span><span>Xingchen Wang<sup>1</sup></span><span>Tao Zhang<sup>3</sup></span><span>Yawen Shao<sup>1,4</sup></span><span>Shi Pan<sup>5</sup></span><span>Min Li<sup>5,†</sup></span><span>Zheng-Jun Zha<sup>1</sup></span></p>
           <p class="affiliations"><span><sup>1</sup>University of Science and Technology of China</span><span><sup>2</sup>Li Auto Inc.</span><span><sup>3</sup>Huazhong University of Science and Technology</span><span><sup>4</sup>Tongyi Lab</span><span><sup>5</sup>Xi'an High-tech Research Institute</span></p>
           <p class="correspondence">† Corresponding authors</p>
         </div>
       </div>
-      <div class="hero-bottom">
-        <div class="hero-note hero-anim hero-fade"><span class="hero-small-label">From exploration to learning</span><p>Not every change deserves a query. Discover directions that matter to the reward, then learn from their actual effect.</p></div>
-        <div class="hero-controls hero-anim hero-fade"><div class="hero-modes" role="group" aria-label="Hero image comparison"><button type="button" data-hero-view="base" aria-pressed="false">Base</button><button type="button" data-hero-view="spotlight" aria-pressed="true" title="Reveal RiDEx under the pointer">Spotlight</button><button type="button" data-hero-view="ridex" aria-pressed="false">RiDEx</button></div><span class="hero-source">Same prompt · Same seed</span><span class="sr-only" id="hero-view-status" role="status">Spotlight: RiDEx is revealed over the base image.</span></div>
-        <div class="hero-cta hero-anim hero-fade"><p>One model. Four reward objectives.<br>See what changes with RiDEx.</p><a class="hero-button" href="#results">Explore the results <span aria-hidden="true">↗</span></a></div>
-      </div>
+      <div class="hero-bottom"><a class="hero-button" href="#results">Explore results <span aria-hidden="true">↗</span></a></div>
     </section>
     <section class="results section" id="results" aria-labelledby="results-title">
       <div class="section-heading"><div><p class="eyebrow">01 / Training</p><h2 id="results-title">Better rewards. Less compute.</h2></div><a class="text-link" href="assets/training_comparison.pdf" target="_blank" rel="noopener noreferrer">Full-resolution PDF <span aria-hidden="true">↗</span></a></div>
@@ -66,7 +60,6 @@
       <div class="format-filter" role="group" aria-label="Filter by image format"><span>Format</span><button type="button" data-format="all" aria-pressed="true">All</button><button type="button" data-format="square" aria-pressed="false">Square</button><button type="button" data-format="landscape" aria-pressed="false">Landscape</button><button type="button" data-format="portrait" aria-pressed="false">Portrait</button></div>
       <div id="comparison-panel" role="tabpanel" aria-labelledby="tab-geneval"><div class="example-heading"><p id="example-prompt">a photo of five apples</p><span id="example-meta"></span></div><div class="comparison-grid" id="comparison-grid"></div><div class="example-thumbnails" id="example-thumbnails" role="group" aria-label="Choose an example"></div></div>
       <div class="gallery-wall-section"><div class="gallery-wall-heading"><h3>More generations</h3><span id="wall-count"></span></div><div class="gallery-wall" id="gallery-wall" aria-label="All generated RiDEx examples"></div></div>
-      <p class="gallery-note">Selected qualitative examples, not an aggregate preference study. <a href="assets/comparison_manifest.json" target="_blank" rel="noopener noreferrer">Generation settings and checkpoints <span aria-hidden="true">↗</span></a></p>
       <noscript><p>Enable JavaScript to switch examples. <a href="assets/comparison_manifest.json">View the image manifest</a>.</p></noscript>
     </section>
     <section class="research section" id="research" aria-labelledby="research-title">

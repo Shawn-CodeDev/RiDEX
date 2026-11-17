@@ -2,21 +2,17 @@
 
 [Live website](https://gary.ac.cn/RiDEX/)
 
-A buildless research page: an interactive full-screen hero, the supplied four-task training
+A buildless research page: an editorial artwork hero, the supplied four-task training
 comparison PDF, and matched Base / DiffusionNFT / RiDEx image comparisons.
 No vector method explainer, duplicated result tables, or frontend framework.
 
-## Interactive hero
+## Hero
 
-The full-screen image pairs native-1024 Base and RiDEx generations with the
-same prompt and seed. A soft cursor-following CSS mask reveals RiDEx. Base,
-Spotlight and RiDEx controls also work with touch and keyboard. The author
-list and affiliations remain visible in the first section.
-
-`hero.css` and `hero.js` own this interaction separately from the image gallery.
-Animation frames run only until the cursor settles, and stop offscreen or when
-the page is hidden. Reduced-motion settings disable intro animation and easing.
-Inter and italic Playfair Display are self-hosted with their OFL licenses.
+`assets/hero-art.webp` is decorative editorial artwork, not a RiDEx or baseline
+model output and not evidence for the method. The paper title, full author list,
+and affiliations appear over the artwork's open upper field. `hero.css` owns the
+hero presentation; `navigation.js` owns the responsive navigation and scroll
+header. Inter and italic Playfair Display are self-hosted with their OFL licenses.
 
 ## Assets
 
@@ -34,8 +30,8 @@ Inter and italic Playfair Display are self-hosted with their OFL licenses.
   Native formats include 1:1, 3:2, 2:3, 16:9 and 9:16. The original square examples
   retain their native 512/1024 resolution.
   No AI upscaling, cropping or retouching is applied to comparison images.
-- The hero crops both genuine model outputs identically for presentation.
-  The gallery comparisons show complete, unaltered frames.
+- Gallery comparisons show complete, unaltered frames; the decorative hero art
+  is separate from the experiment image set.
 
 ## Publishing
 
