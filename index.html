@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="RiDEx: Reward-Informed Directional Exploration for Diffusion Reinforcement Learning. Explore where to perturb a diffusion model, and learn from state-matched terminal rewards.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="RiDEx — Reward-Informed Directional Exploration">
+  <meta property="og:description" content="Reward-relevant exploration spaces for efficient diffusion reinforcement learning. 15× and 29× target-attainment speedups on HPSv2 and PickScore.">
+  <meta property="og:url" content="https://shawn-codedev.github.io/RiDEX/">
+  <title>RiDEx — Reward-Informed Directional Exploration for Diffusion Reinforcement Learning</title>
+  <style>
+    :root{--ink:#152a39;--slate:#526572;--muted:#6d7c88;--teal:#087f7b;--deep:#075e60;--mint:#e5f5f1;--blue:#586eac;--coral:#e07e58;--line:#e2e9ed;--wash:#f7fafb;--paper:#fff;--shadow:0 18px 55px rgba(16,44,64,.055)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:82px}
+    body{margin:0;font-family:Inter,"Helvetica Neue",Arial,system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.68;-webkit-font-smoothing:antialiased}
+    body::before{content:"";position:absolute;top:0;left:0;right:0;height:680px;background:radial-gradient(ellipse at 80% 10%,#e6f8f3 0%,transparent 45%),radial-gradient(ellipse at 14% 20%,#eef3ff 0%,transparent 38%);pointer-events:none;z-index:-1}
+    a{color:var(--teal);text-decoration:none}a:hover{color:var(--deep)}
+    :focus-visible{outline:3px solid #d2a05c;outline-offset:4px;border-radius:5px}
+    .container{width:min(1120px,calc(100% - 48px));margin:auto}
+    .topbar{position:sticky;top:0;z-index:30;border-bottom:1px solid rgba(216,228,231,.8);background:rgba(255,255,255,.92);backdrop-filter:blur(16px)}
+    .nav{display:flex;justify-content:space-between;align-items:center;min-height:65px;gap:18px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.045em;font-size:22px;color:var(--ink)}.brandmark{display:grid;place-items:center;background:var(--ink);color:white;width:31px;height:31px;border-radius:10px;font-size:17px;font-weight:700}
+    .navlinks{display:flex;align-items:center;gap:25px;font-size:13px;font-weight:650}.navlinks a{color:#4a5d6c}.navlinks a:hover{color:var(--teal)}.navlinks .navcode{border:1px solid var(--line);padding:7px 13px;border-radius:9px}
+    .hero{text-align:center;padding:72px 0 53px}.eyebrow{display:inline-block;background:#e9f5f1;border:1px solid #d0e9e2;color:#167067;font-size:11px;letter-spacing:.16em;font-weight:800;text-transform:uppercase;padding:8px 16px;border-radius:100px}
+    h1{font-size:clamp(58px,9vw,93px);line-height:1;letter-spacing:-.082em;margin:23px 0 12px;font-weight:820}
+    .gradient-title{color:var(--teal)}.subtitle{max-width:900px;margin:0 auto;font-size:clamp(22px,3vw,32px);font-weight:700;line-height:1.27;letter-spacing:-.045em}
+    .authors{display:flex;flex-wrap:wrap;justify-content:center;gap:3px 20px;font-size:15px;line-height:2;margin:28px auto 5px;max-width:1000px}
+    .authors span{white-space:nowrap}.authors sup{font-size:10px;color:var(--muted);font-weight:650;padding-left:2px}
+    .affiliations{font-size:12px;color:var(--slate);line-height:1.85;max-width:870px;margin:6px auto 0}.affiliations span{margin:0 7px}
+    .actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:29px auto 0}
+    .button{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:11px 20px;border-radius:11px;border:1px solid var(--line);font-weight:750;font-size:14px;color:var(--ink);background:white;transition:transform .18s,box-shadow .18s}.button:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(21,42,57,.10);color:var(--ink)}.button.primary{background:var(--ink);color:white;border-color:var(--ink)}.button.primary:hover{color:white}
+    .button svg{width:16px;height:16px}
+    .hero-stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:38px auto 0;max-width:790px}
+    .hero-stat{border:1px solid var(--line);border-radius:15px;padding:17px 8px;background:rgba(255,255,255,.84);box-shadow:0 7px 20px rgba(0,0,0,.025)}
+    .hero-stat strong{display:block;font-size:28px;line-height:1.2;letter-spacing:-.055em;color:var(--teal)}.hero-stat span{font-size:11px;font-weight:650;color:var(--slate)}
+    section{padding:72px 0;scroll-margin-top:66px}.section-tint{background:var(--wash);border-top:1px solid #ecf1f2;border-bottom:1px solid #ecf1f2}
+    .section-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.16em;font-weight:850;color:var(--teal);margin:0 0 12px}
+    h2{font-size:clamp(30px,4vw,39px);line-height:1.18;letter-spacing:-.055em;margin:0 0 19px}
+    .section-intro{max-width:760px;color:#465c6b;font-size:16px;margin:0 0 29px}
+    .abstract-text{font-size:16px;line-height:1.94;color:#344d5d;max-width:920px;margin:0 auto}.abstract-text strong{color:var(--ink)}
+    .abstract-panel{background:#fff;border:1px solid var(--line);padding:36px 42px;border-radius:20px;box-shadow:var(--shadow)}
+    .question{font-size:clamp(23px,3.1vw,33px);font-weight:800;letter-spacing:-.04em;line-height:1.35;color:var(--ink);max-width:810px}
+    .motivation{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .mot-card{border:1px solid var(--line);border-radius:20px;background:#fff;overflow:hidden;box-shadow:var(--shadow)}
+    .mot-card .mot-label{padding:17px 24px 5px;font-weight:800;font-size:17px}.mot-card .mot-label.bad{color:#996557}.mot-card .mot-label.good{color:var(--teal)}
+    .mot-card svg{display:block;width:100%;height:auto}.mot-card p{padding:0 23px 20px;font-size:13px;color:var(--slate);margin:0;line-height:1.55}
+    .method-flow{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px}
+    .step{position:relative;border:1px solid var(--line);border-radius:18px;background:white;padding:25px 24px 21px;box-shadow:var(--shadow)}
+    .stepnum{display:inline-flex;align-items:center;justify-content:center;border-radius:10px;width:39px;height:39px;font-size:15px;font-weight:850;background:#edf4ff;color:#4262a0;margin-bottom:13px}
+    .step:nth-child(2) .stepnum{background:#e7f5ee;color:#07836a}.step:nth-child(3) .stepnum{background:#fff0e8;color:#cf714d}
+    .step h3{font-size:18px;letter-spacing:-.025em;line-height:1.3;margin:0 0 9px}.step p{font-size:13.5px;color:#506477;margin:0}.step .formula{display:block;margin-top:16px;border-top:1px solid #e9eff0;padding-top:11px;font-size:14px;color:#225b64;font-family:ui-monospace,Consolas,monospace}
+    .method-note{margin-top:18px;color:#4d6270;font-size:13px}
+    .variant-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:17px;margin-top:24px}
+    .variant{border:1px solid var(--line);background:#fff;border-radius:16px;padding:24px}
+    .variant .tag{display:inline-block;border-radius:6px;font-size:11px;font-weight:750;padding:3px 9px;background:#e4ecff;color:#4a65a4}.variant:nth-child(2) .tag{background:#e3f5ef;color:#057b6f}
+    .variant h3{font-size:19px;margin:11px 0 7px}.variant p{font-size:14px;color:var(--slate);margin:0}
+    .metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:21px 0 28px}
+    .metric{border-radius:16px;border:1px solid #dbe9e7;background:linear-gradient(160deg,#f4fbf9,#fff);padding:19px 16px}
+    .metric strong{font-size:35px;line-height:1.1;color:var(--teal);display:block;letter-spacing:-.06em}.metric small{display:block;color:var(--slate);font-size:12px;font-weight:700;margin-top:5px}
+    .metric .metric-description{font-size:11px;color:#71818c;margin-top:3px}
+    .panel{border:1px solid var(--line);border-radius:20px;padding:24px;background:white;box-shadow:var(--shadow)}
+    .panel h3{font-size:20px;letter-spacing:-.028em;margin:0 0 4px}.panel-sub{font-size:12px;color:var(--slate);margin:0 0 22px}
+    .eff-grid{display:grid;grid-template-columns:1fr 1fr;gap:23px}
+    .eff-task{min-width:0;padding:3px 0}.eff-title{display:flex;align-items:baseline;justify-content:space-between;font-weight:800;font-size:15px;margin:0 0 10px}.speedtag{font-size:11px;font-weight:850;background:#e4f5ef;color:#08756f;padding:4px 10px;border-radius:100px}
+    .bar-row{display:grid;grid-template-columns:99px 1fr 64px;align-items:center;gap:9px;margin:8px 0;font-size:11px;color:#586a76}
+    .bar-track{height:12px;background:#f0f4f5;border-radius:100px;position:relative;overflow:hidden}
+    .bar-fill{height:100%;min-width:4px;border-radius:100px}.bar-fill.nft{background:#aeb9c4}.bar-fill.ridex{background:var(--teal)}
+    .bar-row strong{font-size:11px;text-align:right;color:var(--ink)}
+    .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:24px 0 0}
+    table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:13px}
+    th{text-align:right;padding:14px 18px;color:#4e6170;font-size:12px;background:#f5f8f9;border-bottom:1px solid var(--line);white-space:nowrap}
+    td{text-align:right;padding:13px 18px;border-bottom:1px solid #edf0f2;white-space:nowrap}
+    th:first-child,td:first-child{text-align:left;font-weight:700}
+    tbody tr:last-child td{border-bottom:0}.highlight td{background:#e9f6f2;color:#066b65;font-weight:850}
+    .tiny{font-size:11.5px;color:#7a8992;line-height:1.6}
+    .abl-intro{max-width:780px;color:#506472;margin-bottom:15px}
+    .credit-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0}
+    .credit-item{border:1px solid var(--line);border-radius:12px;text-align:center;padding:15px 5px;background:#fff}
+    .credit-item strong{color:var(--teal);font-size:19px;display:block}.credit-item span{color:var(--slate);font-size:11px}
+    .objective-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .objective{padding:19px;background:white;border:1px solid var(--line);border-radius:15px}
+    .objective b{display:block;font-size:16px;margin-bottom:5px}.objective p{font-size:12px;line-height:1.65;color:var(--slate);margin:0}.objective .o-icon{font-size:22px;margin-bottom:9px;display:block}
+    .bib-wrap{position:relative}.bib-wrap pre{padding:27px;background:#102839;color:#e7f3f2;border-radius:16px;overflow-x:auto;font:13px/1.78 ui-monospace,SFMono-Regular,Consolas,monospace;margin:0}.copybtn{position:absolute;right:14px;top:14px;border-radius:8px;border:1px solid rgba(255,255,255,.22);color:white;background:#294658;cursor:pointer;padding:7px 12px;font-weight:750;font-size:11px}
+    .footer{background:#f4f8f8;border-top:1px solid var(--line);padding:26px 0;color:#6f818d;font-size:12px;text-align:center}
+    .footer a{font-weight:700}
+    @media(max-width:980px){.navlinks{gap:15px}.hero-stat-row{max-width:720px}.metrics-grid,.objective-grid{grid-template-columns:repeat(2,1fr)}.eff-grid{grid-template-columns:1fr}}
+    @media(max-width:680px){
+      html{scroll-padding-top:68px}.container{width:calc(100% - 28px)}.nav{min-height:62px}.navlinks a:not(.navcode){display:none}.navlinks{gap:0}
+      .hero{padding:54px 0 40px}.subtitle{font-size:23px}.authors{font-size:13px;gap:0 12px}.affiliations{font-size:11px}
+      .hero-stat-row{gap:8px}.hero-stat{padding:12px 3px}.hero-stat strong{font-size:24px}.hero-stat span{font-size:9px}
+      section{padding:54px 0}.abstract-panel{padding:23px 22px}.abstract-text{font-size:14px}
+      .motivation,.method-flow,.variant-grid{grid-template-columns:1fr}.metrics-grid{gap:9px}.metric strong{font-size:29px}.metric{padding:14px 12px}.panel{padding:18px 15px}
+      .bar-row{grid-template-columns:78px 1fr 55px;gap:5px}.objective-grid{grid-template-columns:1fr 1fr}
+      .credit-summary{grid-template-columns:repeat(2,1fr)}.bib-wrap pre{font-size:10px;padding:23px 11px}
+    }
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="#top" aria-label="RiDEx home"><span class="brandmark">R</span> RiDEx</a>
+      <nav class="navlinks" aria-label="Page navigation">
+        <a href="#abstract">Abstract</a><a href="#motivation">Motivation</a><a href="#method">Method</a><a href="#results">Results</a><a href="#citation">BibTeX</a>
+        <a class="navcode" href="https://github.com/Shawn-CodeDev/RiDEX" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <div class="container hero">
+      <span class="eyebrow">Diffusion reinforcement learning · research project</span>
+      <h1><span class="gradient-title">RiDEx</span></h1>
+      <p class="subtitle">Reward-Informed Directional Exploration<br>for Diffusion Reinforcement Learning</p>
+      <div class="authors" aria-label="Paper authors">
+        <span>Song Yan<sup>1,*</sup></span><span>Chenfeng Wang<sup>1,2</sup></span><span>Wei Zhai<sup>1,†</sup></span>
+        <span>Xingchen Wang<sup>1</sup></span><span>Tao Zhang<sup>3</sup></span><span>Yawen Shao<sup>1,4</sup></span>
+        <span>Shi Pan<sup>5</sup></span><span>Min Li<sup>5,†</sup></span><span>Zheng-Jun Zha<sup>1</sup></span>
+      </div>
+      <p class="affiliations"><span><sup>1</sup>University of Science and Technology of China</span><span><sup>2</sup>Li Auto Inc.</span><span><sup>3</sup>Huazhong University of Science and Technology</span><span><sup>4</sup>Tongyi Lab</span><span><sup>5</sup>Xi'an High-tech Research Institute</span></p>
+      <div class="actions">
+        <a class="button primary" href="#abstract"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v5h5M9 12h7M9 16h7"/></svg> Read the abstract</a>
+        <a class="button" href="https://github.com/Shawn-CodeDev/RiDEX" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .9A11.1 11.1 0 0 0 8.5 22.5c.55.1.75-.24.75-.54v-2.1c-3.05.66-3.7-1.28-3.7-1.28-.5-1.27-1.22-1.6-1.22-1.6-1-.68.08-.67.08-.67 1.12.08 1.7 1.14 1.7 1.14 1 .1.75 2.14 3.17 1.37.1-.72.4-1.2.72-1.49-2.44-.27-5-1.22-5-5.43 0-1.2.43-2.19 1.14-2.97-.12-.28-.5-1.4.1-2.92 0 0 .93-.3 3.05 1.13A10.6 10.6 0 0 1 12 6.9c.94 0 1.88.13 2.76.37 2.12-1.43 3.04-1.13 3.04-1.13.6 1.52.23 2.64.12 2.92.71.78 1.13 1.77 1.13 2.97 0 4.22-2.57 5.15-5.02 5.42.41.36.77 1.05.77 2.12v2.39c0 .3.2.65.76.54A11.1 11.1 0 0 0 12 .9Z"/></svg> GitHub repository</a>
+        <a class="button" href="#citation">Cite RiDEx</a>
+      </div>
+      <div class="hero-stat-row" aria-label="Key results">
+        <div class="hero-stat"><strong>15×</strong><span>HPSv2 target attainment</span></div>
+        <div class="hero-stat"><strong>29×</strong><span>PickScore target attainment</span></div>
+        <div class="hero-stat"><strong>4</strong><span>evaluated reward objectives</span></div>
+      </div>
+    </div>
+
+    <section id="abstract">
+      <div class="container">
+        <p class="section-kicker">01 · Paper</p>
+        <h2>Abstract</h2>
+        <div class="abstract-panel">
+          <p class="abstract-text">Reward-based diffusion post-training updates model parameters from task rewards. While existing approaches improve sampling and policy optimization, they still rely largely on isotropic random perturbations in a high-dimensional latent space for exploration. Such variation often spends the perturbation budget on changes with little influence on the target reward, making exploration inefficient. We study <strong>where diffusion models should explore and how to learn from that exploration.</strong> We introduce Reward-Informed Directional Exploration (RiDEx), which concentrates local exploration in reward-relevant subspaces of the denoising velocity field. Conditional residuals or differentiable reward gradients propose the subspace, and equal-and-opposite perturbations at the same generation state measure its terminal reward response. The reward difference supplies signed local supervision in the explored coordinates, while all generated images contribute to global DiffusionNFT learning. RiDEx thereby couples exploration-space selection with feedback about the changes it produces. On Stable Diffusion 3.5 Medium, RiDEx attains the highest peak rewards among the evaluated methods on four alignment and preference tasks. Its gradient-direction instantiation achieves <strong>15× and 29× target-attainment speedups</strong> over DiffusionNFT on HPSv2 and PickScore, measured in H200 GPU hours. Controlled experiments confirm that reward-aligned directions elicit stronger responses at equal perturbation magnitude, and that applying their measured credit improves curve-average reward across all four tasks.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="motivation" class="section-tint">
+      <div class="container">
+        <p class="section-kicker">02 · Motivation</p>
+        <h2>The direction of exploration matters.</h2>
+        <p class="section-intro">High-dimensional random exploration can change an image without changing what the reward cares about. With the same perturbation magnitude, a reward-aligned direction concentrates variation on an objective-relevant attribute.</p>
+        <div class="motivation">
+          <div class="mot-card">
+            <div class="mot-label bad">Isotropic / random exploration</div>
+            <svg viewBox="0 0 470 240" role="img" aria-label="Illustrative random arrows spread across directions and weakly align with a target">
+              <defs><marker id="arrgray" markerWidth="6" markerHeight="6" refX="5.4" refY="3" orient="auto"><path d="M0 0L6 3L0 6" fill="#a6b5c0"/></marker></defs>
+              <rect x="23" y="17" width="424" height="196" rx="15" fill="#f7fafb"/>
+              <circle cx="205" cy="113" r="37" fill="#e7eef2" stroke="#b9c9d2" stroke-width="1.5"/>
+              <g stroke="#a6b5c0" stroke-width="3" marker-end="url(#arrgray)">
+                <path d="M205 113 L98 58"/><path d="M205 113L205 23"/><path d="M205 113L306 45"/><path d="M205 113L353 104"/><path d="M205 113L303 180"/><path d="M205 113L198 204"/><path d="M205 113L99 173"/><path d="M205 113L76 111"/>
+              </g>
+              <circle cx="205" cy="113" r="6" fill="#41586a"/>
+              <text x="360" y="178" fill="#788995" font-size="12" font-weight="700">Weak reward</text>
+              <text x="360" y="194" fill="#788995" font-size="12">response</text>
+            </svg>
+            <p>Equal-magnitude perturbations are spread across many directions, including those that barely affect the desired attribute.</p>
+          </div>
+          <div class="mot-card">
+            <div class="mot-label good">Reward-aligned exploration</div>
+            <svg viewBox="0 0 470 240" role="img" aria-label="Illustrative concentrated exploration aligned with a reward gradient">
+              <defs><marker id="arrteal" markerWidth="6" markerHeight="6" refX="5.5" refY="3" orient="auto"><path d="M0 0L6 3L0 6" fill="#078d80"/></marker></defs>
+              <rect x="23" y="17" width="424" height="196" rx="15" fill="#f4fbf8"/>
+              <circle cx="188" cy="128" r="38" fill="#e0f2ee" stroke="#afdcd1" stroke-width="1.5"/>
+              <line x1="188" y1="128" x2="317" y2="52" stroke="#078d80" stroke-width="5" marker-end="url(#arrteal)"/>
+              <line x1="188" y1="128" x2="87" y2="187" stroke="#078d80" stroke-width="2" stroke-dasharray="7 6" opacity=".65"/>
+              <circle cx="188" cy="128" r="6" fill="#056b64"/>
+              <rect x="321" y="25" rx="10" width="118" height="44" fill="#dff5e9"/>
+              <text x="379" y="43" text-anchor="middle" fill="#086c61" font-size="11" font-weight="800">Target-sensitive</text>
+              <text x="379" y="57" text-anchor="middle" fill="#086c61" font-size="11">direction</text>
+              <text x="254" y="178" fill="#087b70" font-size="12" font-weight="700">Strong measured</text>
+              <text x="254" y="194" fill="#087b70" font-size="12">response</text>
+            </svg>
+            <p>Reward-informed orientation puts the same energy into changes with measurable consequences for the objective.</p>
+          </div>
+        </div>
+        <p class="tiny" style="margin-top:13px">Conceptual illustration of the fixed-energy directional response criterion; no generated examples are simulated in this graphic.</p>
+        <p class="question" style="margin:39px auto 0;text-align:center">Where should diffusion models explore—and how should they learn from those changes?</p>
+      </div>
+    </section>
+
+    <section id="method">
+      <div class="container">
+        <p class="section-kicker">03 · Method overview</p>
+        <h2>Explore reward-relevant changes.<br>Credit the state that produced them.</h2>
+        <p class="section-intro">RiDEx links exploration-space selection with terminal reward measurement. The pair of trajectories shares a starting state and solver history; only the local velocity intervention differs.</p>
+        <div class="method-flow">
+          <div class="step"><div class="stepnum">01</div><h3>Direction proposal</h3><p>Select a compact subspace of the denoising velocity field from conditional information or differentiable reward gradients.</p><span class="formula">u ∈ S<sub>h,R</sub></span></div>
+          <div class="step"><div class="stepnum">02</div><h3>Terminal measurement</h3><p>Roll out equally sized positive and negative perturbations from the same generation state, and evaluate both completed images.</p><span class="formula">d = (R<sup>+</sup> − R<sup>−</sup>)/(2r)</span></div>
+          <div class="step"><div class="stepnum">03</div><h3>State-matched update</h3><p>Apply the signed reward contrast to the originating velocity coordinates. All completed images also support global NFT learning.</p><span class="formula">L = L<sub>NFT</sub> + λL<sub>dir</sub>*</span></div>
+        </div>
+        <p class="method-note">*The additive form depicts RiDEx-Grad. RiDEx-CFG uses a projected, trust-scaled, norm-matched gradient combination.</p>
+        <div class="variant-grid">
+          <div class="variant"><span class="tag">RiDEx-CFG</span><h3>Conditional alignment directions</h3><p>Uses the conditional–unconditional velocity residual to anchor a two-dimensional exploration space for text–image alignment objectives. It does not require a differentiable reward.</p></div>
+          <div class="variant"><span class="tag">RiDEx-Grad</span><h3>Differentiable reward directions</h3><p>When the scorer admits a differentiable reward path, the reward gradient proposes a local direction. Paired endpoint rewards then determine its measured credit.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-tint" id="results">
+      <div class="container">
+        <p class="section-kicker">04 · Experimental results</p>
+        <h2>Faster reward attainment. Higher peak scores.</h2>
+        <p class="section-intro">Results on Stable Diffusion 3.5 Medium across compositional alignment, text rendering, and preference rewards. Each speedup compares the first evaluated checkpoint attaining a shared DiffusionNFT target.</p>
+        <div class="metrics-grid">
+          <div class="metric"><strong>2.6×</strong><small>GenEval</small><div class="metric-description">target attainment</div></div>
+          <div class="metric"><strong>2.0×</strong><small>OCR</small><div class="metric-description">target attainment</div></div>
+          <div class="metric"><strong>15.0×</strong><small>HPSv2</small><div class="metric-description">target attainment</div></div>
+          <div class="metric"><strong>29.0×</strong><small>PickScore</small><div class="metric-description">target attainment</div></div>
+        </div>
+        <div class="panel">
+          <h3>H200 GPU hours to a matched reward target</h3>
+          <p class="panel-sub">Lower is better. Within each task, DiffusionNFT is the 100% reference length; values are GPU hours, not per-step latency.</p>
+          <div class="eff-grid">
+            <div class="eff-task"><div class="eff-title">GenEval <span class="speedtag">2.6×</span></div><div class="bar-row"><span>DiffusionNFT</span><div class="bar-track"><div class="bar-fill nft" style="width:100%"></div></div><strong>31.39 h</strong></div><div class="bar-row"><span>RiDEx</span><div class="bar-track"><div class="bar-fill ridex" style="width:38.45%"></div></div><strong>12.07 h</strong></div></div>
+            <div class="eff-task"><div class="eff-title">OCR <span class="speedtag">2.0×</span></div><div class="bar-row"><span>DiffusionNFT</span><div class="bar-track"><div class="bar-fill nft" style="width:100%"></div></div><strong>16.44 h</strong></div><div class="bar-row"><span>RiDEx</span><div class="bar-track"><div class="bar-fill ridex" style="width:50%"></div></div><strong>8.22 h</strong></div></div>
+            <div class="eff-task"><div class="eff-title">HPSv2 <span class="speedtag">15.0×</span></div><div class="bar-row"><span>DiffusionNFT</span><div class="bar-track"><div class="bar-fill nft" style="width:100%"></div></div><strong>114.63 h</strong></div><div class="bar-row"><span>RiDEx</span><div class="bar-track"><div class="bar-fill ridex" style="width:6.67%"></div></div><strong>7.64 h</strong></div></div>
+            <div class="eff-task"><div class="eff-title">PickScore <span class="speedtag">29.0×</span></div><div class="bar-row"><span>DiffusionNFT</span><div class="bar-track"><div class="bar-fill nft" style="width:100%"></div></div><strong>222.52 h</strong></div><div class="bar-row"><span>RiDEx</span><div class="bar-track"><div class="bar-fill ridex" style="width:3.45%"></div></div><strong>7.67 h</strong></div></div>
+          </div>
+        </div>
+        <h3 style="font-size:21px;margin:40px 0 12px;letter-spacing:-.03em">Peak reward comparison</h3>
+        <div class="table-wrap">
+          <table aria-label="Peak reward comparison">
+            <thead><tr><th>Method</th><th>GenEval</th><th>OCR</th><th>HPSv2</th><th>PickScore</th></tr></thead>
+            <tbody>
+              <tr><td>Flow-GRPO</td><td>0.9500</td><td>0.9200</td><td>31.6000</td><td>23.5000</td></tr>
+              <tr><td>ReFL</td><td>—</td><td>—</td><td>35.8000</td><td>23.9200</td></tr>
+              <tr><td>ExploreNet-GRPO</td><td>—</td><td>—</td><td>30.1700</td><td>22.1234</td></tr>
+              <tr><td>DiffusionNFT</td><td>0.9501</td><td>0.9285</td><td>34.2538</td><td>22.6407</td></tr>
+              <tr class="highlight"><td>RiDEx</td><td>0.9733</td><td>0.9683</td><td>38.5154</td><td>24.0847</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="tiny">All rows reflect the evaluated comparison reported in the paper. HPSv2 is displayed ×100 and PickScore in logit units. Dashes indicate task entries not included for that method.</p>
+      </div>
+    </section>
+
+    <section id="ablation">
+      <div class="container">
+        <p class="section-kicker">05 · Ablation analysis</p>
+        <h2>Measured local credit improves learning.</h2>
+        <p class="section-intro">Applying the state-matched contrast achieves the highest curve-average reward in all four tasks. Mean AUC is the trapezoidal area under each task's reward curve divided by its evaluation-window length.</p>
+        <div class="table-wrap">
+          <table aria-label="Mean AUC credit ablation">
+            <thead><tr><th>Arm</th><th>GenEval</th><th>OCR</th><th>HPSv2</th><th>PickScore</th></tr></thead>
+            <tbody>
+              <tr><td>Paired collection</td><td>0.9123</td><td>0.7640</td><td>36.3102</td><td>23.2071</td></tr>
+              <tr><td>Measurement only</td><td>0.9206</td><td>0.9100</td><td>37.0169</td><td>23.4473</td></tr>
+              <tr class="highlight"><td>Full credit</td><td>0.9260</td><td>0.9305</td><td>37.7607</td><td>23.6770</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="credit-summary">
+          <div class="credit-item"><strong>+0.0054</strong><span>GenEval AUC</span></div>
+          <div class="credit-item"><strong>+0.0205</strong><span>OCR AUC</span></div>
+          <div class="credit-item"><strong>+0.7438</strong><span>HPSv2 AUC</span></div>
+          <div class="credit-item"><strong>+0.2297</strong><span>PickScore AUC</span></div>
+        </div>
+        <p class="tiny">AUC differences compare Full credit with Measurement only, using each task's common evaluation window.</p>
+      </div>
+    </section>
+
+    <section id="objectives" class="section-tint">
+      <div class="container">
+        <p class="section-kicker">06 · Applications</p>
+        <h2>One exploration principle, multiple rewards.</h2>
+        <p class="section-intro">The exploration mechanism adapts to the information available about the objective. The evaluated tasks cover both non-differentiable alignment and differentiable preference rewards.</p>
+        <div class="objective-grid">
+          <div class="objective"><span class="o-icon">◫</span><b>GenEval</b><p>Counting, color binding, object relationships and compositional faithfulness.</p></div>
+          <div class="objective"><span class="o-icon">Aa</span><b>OCR</b><p>Generating images with accurate, readable text specified by the prompt.</p></div>
+          <div class="objective"><span class="o-icon">✦</span><b>HPSv2</b><p>Rewarding visual compositions and images aligned with human preferences.</p></div>
+          <div class="objective"><span class="o-icon">◇</span><b>PickScore</b><p>Learning from image preference scores on diverse text-to-image prompts.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="citation">
+      <div class="container">
+        <p class="section-kicker">07 · Citation</p>
+        <h2>BibTeX</h2>
+        <div class="bib-wrap"><button type="button" class="copybtn" id="copyBib" aria-label="Copy BibTeX citation">Copy</button><pre id="bibtex">@misc{yan2026ridex,
+  title={RiDEx: Reward-Informed Directional Exploration for Diffusion Reinforcement Learning},
+  author={Yan, Song and Wang, Chenfeng and Zhai, Wei and Wang, Xingchen and Zhang, Tao and Shao, Yawen and Pan, Shi and Li, Min and Zha, Zheng-Jun},
+  year={2026},
+  note={Preprint}
+}</pre></div>
+        <p class="tiny" style="margin-top:13px">The preprint identifier and downloadable manuscript link can be added when the public paper URL is available.</p>
+      </div>
+    </section>
+  </main>
+  <footer class="footer"><div class="container">RiDEx · Reward-Informed Directional Exploration · <a href="https://github.com/Shawn-CodeDev/RiDEX">GitHub</a> · Project-page organization inspired by <a href="https://yawen-shao.github.io/VGPO/" target="_blank" rel="noopener noreferrer">VGPO</a>.</div></footer>
+  <script>
+    (function(){
+      var btn=document.getElementById('copyBib');
+      if(!btn)return;
+      btn.addEventListener('click',function(){
+        var text=document.getElementById('bibtex').textContent;
+        if(navigator.clipboard&&navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){btn.textContent='Copied!';setTimeout(function(){btn.textContent='Copy'},1800)}).catch(function(){btn.textContent='Select text to copy'});
+        }else{
+          var area=document.createElement('textarea');area.value=text;area.style.position='fixed';area.style.opacity='0';document.body.appendChild(area);area.select();
+          try{document.execCommand('copy');btn.textContent='Copied!'}catch(e){btn.textContent='Select text to copy'}
+          document.body.removeChild(area);setTimeout(function(){btn.textContent='Copy'},1800);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
