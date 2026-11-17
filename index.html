@@ -82,6 +82,8 @@
     .objective-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
     .objective{padding:19px;background:white;border:1px solid var(--line);border-radius:15px}
     .objective b{display:block;font-size:16px;margin-bottom:5px}.objective p{font-size:12px;line-height:1.65;color:var(--slate);margin:0}.objective .o-icon{font-size:22px;margin-bottom:9px;display:block}
+    .visual-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}.visual-card{margin:0;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff;box-shadow:var(--shadow)}.visual-card img{width:100%;height:auto;display:block;background:#fff}.visual-caption{border-top:1px solid var(--line);padding:14px 15px}.visual-caption strong{font-size:13px}.visual-caption p{color:var(--slate);font-size:11.5px;line-height:1.6;margin:5px 0 0}.pair-legend{display:flex;justify-content:space-between;color:#778b95;font-weight:800;font-size:10px;padding:6px 17px}.pair-legend span:last-child{color:var(--teal)}
+    @media(max-width:980px){.visual-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){.visual-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.visual-caption{padding:10px}.visual-caption p{font-size:10px}}
     .bib-wrap{position:relative}.bib-wrap pre{padding:27px;background:#102839;color:#e7f3f2;border-radius:16px;overflow-x:auto;font:13px/1.78 ui-monospace,SFMono-Regular,Consolas,monospace;margin:0}.copybtn{position:absolute;right:14px;top:14px;border-radius:8px;border:1px solid rgba(255,255,255,.22);color:white;background:#294658;cursor:pointer;padding:7px 12px;font-weight:750;font-size:11px}
     .footer{background:#f4f8f8;border-top:1px solid var(--line);padding:26px 0;color:#6f818d;font-size:12px;text-align:center}
     .footer a{font-weight:700}
@@ -103,7 +105,7 @@
     <div class="container nav">
       <a class="brand" href="#top" aria-label="RiDEx home"><span class="brandmark">R</span> RiDEx</a>
       <nav class="navlinks" aria-label="Page navigation">
-        <a href="#abstract">Abstract</a><a href="#motivation">Motivation</a><a href="#method">Method</a><a href="#results">Results</a><a href="#citation">BibTeX</a>
+        <a href="#abstract">Abstract</a><a href="#motivation">Motivation</a><a href="#method">Method</a><a href="#results">Results</a><a href="#gallery">Gallery</a><a href="#citation">BibTeX</a>
         <a class="navcode" href="https://github.com/Shawn-CodeDev/RiDEX" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
       </nav>
     </div>
@@ -282,9 +284,11 @@
       </div>
     </section>
 
+    <section id="gallery"><div class="container"><p class="section-kicker">07 · Qualitative comparisons</p><h2>Targeted improvements across prompts.</h2><p class="section-intro">Selected Base/RiDEx pairs from the paper's qualitative comparisons, spanning counting, color binding, landscape composition, and scene structure.</p><div class="visual-grid"><figure class="visual-card"><div class="pair-legend"><span>Base</span><span>RiDEx</span></div><img src="assets/qualitative-counting.webp" width="280" height="139" alt="Four stop signs, Base left and RiDEx right" loading="lazy" decoding="async"><figcaption class="visual-caption"><strong>GenEval · Counting</strong><p>a photo of four stop signs</p></figcaption></figure><figure class="visual-card"><div class="pair-legend"><span>Base</span><span>RiDEx</span></div><img src="assets/qualitative-color.webp" width="280" height="139" alt="Red cat and blue dog, Base left and RiDEx right" loading="lazy" decoding="async"><figcaption class="visual-caption"><strong>GenEval · Color binding</strong><p>a photo of a red cat and a blue dog</p></figcaption></figure><figure class="visual-card"><div class="pair-legend"><span>Base</span><span>RiDEx</span></div><img src="assets/qualitative-bridge.webp" width="280" height="139" alt="Alpine footbridge, Base left and RiDEx right" loading="lazy" decoding="async"><figcaption class="visual-caption"><strong>HPSv2 · Composition</strong><p>Alpine footbridge, turquoise lake and lakeside cabin</p></figcaption></figure><figure class="visual-card"><div class="pair-legend"><span>Base</span><span>RiDEx</span></div><img src="assets/qualitative-vineyard.webp" width="280" height="139" alt="Vineyard, Base left and RiDEx right" loading="lazy" decoding="async"><figcaption class="visual-caption"><strong>HPSv2 · Scene structure</strong><p>Vineyard rows leading toward a stone farmhouse</p></figcaption></figure></div><p class="tiny" style="margin-top:14px">Original generation pairs, compressed for the web; Base is on the left and RiDEx on the right.</p></div></section>
+
     <section id="citation">
       <div class="container">
-        <p class="section-kicker">07 · Citation</p>
+        <p class="section-kicker">08 · Citation</p>
         <h2>BibTeX</h2>
         <div class="bib-wrap"><button type="button" class="copybtn" id="copyBib" aria-label="Copy BibTeX citation">Copy</button><pre id="bibtex">@misc{yan2026ridex,
   title={RiDEx: Reward-Informed Directional Exploration for Diffusion Reinforcement Learning},
