@@ -1,40 +1,23 @@
-# RiDEx — Reward-Informed Directional Exploration for Diffusion Reinforcement Learning
+# RiDEx — Reward-Informed Directional Exploration
 
-**Academic project website:** https://shawn-codedev.github.io/RiDEX/
+Project page for **RiDEx: Reward-Informed Directional Exploration for Diffusion Reinforcement Learning**.
 
-This repository contains the **RiDEx project page** based on the research manuscript *RiDEx: Reward-Informed Directional Exploration for Diffusion Reinforcement Learning*.
+**Website:** https://shawn-codedev.github.io/RiDEX/
 
-The page includes the paper authors and affiliations, abstract, motivation, a three-stage method diagram, four-task H200 GPU-hour target-attainment comparisons, peak reward tables, local-credit ablations, and four original Base/RiDEx qualitative sample pairs.
+## Website design
 
-## Activate GitHub Pages
+The site uses a fullscreen mosaic of original RiDEx generations, a three-stage method visualization, task-switchable H200 GPU-hour comparisons, sortable peak-reward results, a four-task credit ablation, eight draggable Base/RiDEx image comparisons, and the manuscript abstract and citation. Its visual direction is inspired by the DiffusionOPSD research website; the code and layout are written for RiDEx.
 
-This is a standalone static site: no build tools or external JavaScript packages are required.
+`index.html`, `styles.css`, and `script.js` are standalone static files, with no external JavaScript or font dependencies. Four AVIF sprite sheets contain compressed crops from the author's qualitative PDF plates. Each row is a genuine Base/RiDEx pair; no new samples are generated for the site. Previous assets are retained in the repository.
 
-**One-time GitHub setting:** open [Settings → Pages](https://github.com/Shawn-CodeDev/RiDEX/settings/pages), then under **Build and deployment** choose **Deploy from a branch**, **main**, **/(root)**, and **Save**. After publication, visit:
+## GitHub Pages
 
-**https://shawn-codedev.github.io/RiDEX/**
+Publish the **main** branch from **/(root)** in Settings → Pages. The `.nojekyll` file supports static serving. For local preview, run `python -m http.server 8000` from the repository and visit http://localhost:8000/.
 
-Files are served from the root `index.html`; the site uses `assets/method-overview.svg`, four original web-optimized `assets/qualitative-*.webp` comparisons, and `favicon.svg`. The sample thumbnails are compressed crops of the manuscript's qualitative PDF, not newly generated examples.
+## Research content
 
-## Key results
+The text, author list, task mappings, and numerical results follow the supplied arXiv-source manuscript. CFG is framed by text–image alignment objectives; Grad is framed by differentiable reward paths. The 15× and 29× comparisons measure H200 GPU hours to a matched DiffusionNFT reward target, not generation latency. A public manuscript URL can be added when available; the site does not link to a nonexistent PDF.
 
-- **15×** HPSv2 target-attainment efficiency over DiffusionNFT
-- **29×** PickScore target-attainment efficiency over DiffusionNFT
-- Tests across GenEval, OCR, HPSv2, and PickScore on SD3.5 Medium
+## Accessibility
 
-Speedups measure H200 GPU hours to a matched reward target.
-
-## Manuscript and implementation
-
-The website documents the uploaded research preprint. The public PDF identifier and complete training source will be linked separately when available; no non-existent PDF download URL is shown.
-
-## Citation
-
-```bibtex
-@misc{yan2026ridex,
-  title={RiDEx: Reward-Informed Directional Exploration for Diffusion Reinforcement Learning},
-  author={Yan, Song and Wang, Chenfeng and Zhai, Wei and Wang, Xingchen and Zhang, Tao and Shao, Yawen and Pan, Shi and Li, Min and Zha, Zheng-Jun},
-  year={2026},
-  note={Preprint}
-}
-```
+Responsive layouts, keyboard-operable task tabs and comparison sliders, an accessible mobile menu, a skip link, reduced-motion support, a motion toggle, horizontal table scrolling, and BibTeX copy with a fallback are included.
