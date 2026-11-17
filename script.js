@@ -2,19 +2,26 @@
 const examples = window.RIDEX_EXAMPLES || [];
 const methods = ['Base', 'DiffusionNFT', 'RiDEx'];
 const tabs = [...document.querySelectorAll('[data-task]')];
+const formatButtons = [...document.querySelectorAll('[data-format]')];
 const grid = document.getElementById('comparison-grid');
 const panel = document.getElementById('comparison-panel');
 const dialog = document.getElementById('image-dialog');
-let task = 'geneval', index = 0, lastFocus;
-function currentRows() { return examples.filter(row => row.reward === task); }
+let task = 'geneval', format = 'all', index = 0, lastFocus;
+function formatOf(row) { return row.width === row.height ? 'square' : row.width > row.height ? 'landscape' : 'portrait'; }
+function currentRows() { return examples.filter(row => row.reward === task && (format === 'all' || formatOf(row) === format)); }
 function currentExample() { return currentRows()[index]; }
+function dimensions(row) {
+  let a = row.width, b = row.height;
+  while (b) [a, b] = [b, a % b];
+  return `${row.width} × ${row.height} · ${row.width / a}:${row.height / a} · Seed ${row.seed}`;
+}
 function showLarge(method) {
   const example = currentExample();
   document.getElementById('dialog-title').textContent = method === 'Base' ? 'Base · SD3.5 Medium' : method;
   document.getElementById('dialog-prompt').textContent = example.prompt;
   const image = document.getElementById('dialog-image');
   image.src = example.images[method]; image.alt = `${method}: ${example.prompt}`;
-  image.width = example.resolution; image.height = example.resolution;
+  image.width = example.width; image.height = example.height;
   document.querySelectorAll('.dialog-methods button').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.method === method)));
   if (!dialog.open) { lastFocus = document.activeElement; dialog.showModal(); document.body.style.overflow = 'hidden'; }
 }
@@ -23,10 +30,21 @@ methods.forEach(method => {
   button.addEventListener('click', () => showLarge(method)); document.querySelector('.dialog-methods').append(button);
 });
 function render() {
-  const rows = currentRows(), example = rows[index]; if (!example) return;
+  const rows = currentRows();
+  index = Math.min(index, Math.max(0, rows.length - 1));
+  const example = rows[index];
+  document.getElementById('example-count').textContent = rows.length ? `${String(index + 1).padStart(2, '0')} / ${String(rows.length).padStart(2, '0')}` : '00 / 00';
+  document.getElementById('previous-example').disabled = !rows.length;
+  document.getElementById('next-example').disabled = !rows.length;
+  if (!example) {
+    document.getElementById('example-prompt').textContent = 'No examples match this format.';
+    document.getElementById('example-meta').textContent = '';
+    grid.replaceChildren(); document.getElementById('example-thumbnails').replaceChildren();
+    return;
+  }
   document.getElementById('example-prompt').textContent = example.prompt;
-  document.getElementById('example-meta').textContent = `${example.resolution} × ${example.resolution} · Seed ${example.seed}`;
-  document.getElementById('example-count').textContent = `${String(index + 1).padStart(2, '0')} / ${String(rows.length).padStart(2, '0')}`;
+  document.getElementById('example-meta').textContent = dimensions(example);
+  grid.classList.toggle('portrait-comparison', formatOf(example) === 'portrait');
   grid.replaceChildren();
   methods.forEach(method => {
     const figure = document.createElement('figure'), label = document.createElement('figcaption');
@@ -35,16 +53,37 @@ function render() {
     const button = document.createElement('button'); button.className = 'image-button'; button.type = 'button';
     button.setAttribute('aria-label', `Enlarge ${method}: ${example.prompt}`); button.title = `View ${method} at full resolution`;
     const image = document.createElement('img'); image.src = example.images[method]; image.alt = `${method}: ${example.prompt}`;
-    image.width = example.resolution; image.height = example.resolution; image.decoding = 'async';
+    image.width = example.width; image.height = example.height; image.decoding = 'async'; image.loading = 'lazy';
+    button.style.setProperty('--image-ratio', `${example.width} / ${example.height}`);
     const icon = document.createElement('span'); icon.className = 'zoom-icon'; icon.textContent = '↗'; icon.setAttribute('aria-hidden', 'true');
     button.append(image, icon); button.addEventListener('click', () => showLarge(method)); figure.append(label, button); grid.append(figure);
   });
   const thumbnails = document.getElementById('example-thumbnails'); thumbnails.replaceChildren();
   rows.forEach((row, number) => {
     const button = document.createElement('button'); button.type = 'button'; button.setAttribute('aria-pressed', String(index === number)); button.setAttribute('aria-label', `Show example: ${row.title}`);
-    const image = document.createElement('img'); image.src = row.images.RiDEx; image.alt = ''; image.width = 48; image.height = 48;
+    const image = document.createElement('img'); image.src = row.images.RiDEx; image.alt = ''; image.width = row.width; image.height = row.height; image.loading = 'lazy';
     const label = document.createElement('span'); label.textContent = row.title; button.append(image, label);
     button.addEventListener('click', () => { index = number; render(); thumbnails.children[number].focus({preventScroll: true}); }); thumbnails.append(button);
+  });
+}
+function renderWall() {
+  const wall = document.getElementById('gallery-wall'); wall.replaceChildren();
+  document.getElementById('wall-count').textContent = `${examples.length} examples`;
+  examples.forEach(row => {
+    const button = document.createElement('button'); button.type = 'button'; button.className = 'wall-item';
+    button.setAttribute('aria-label', `Compare ${row.title}, ${row.reward}`);
+    const image = document.createElement('img'); image.src = row.images.RiDEx; image.alt = ''; image.width = row.width; image.height = row.height; image.loading = 'lazy'; image.decoding = 'async';
+    const title = document.createElement('span'); title.textContent = row.title;
+    button.append(image, title);
+    button.addEventListener('click', () => {
+      task = row.reward; format = 'all'; index = examples.filter(item => item.reward === task).indexOf(row);
+      const activeTab = tabs.find(tab => tab.dataset.task === task);
+      tabs.forEach(tab => { const selected = tab === activeTab; tab.setAttribute('aria-selected', String(selected)); tab.tabIndex = selected ? 0 : -1; });
+      formatButtons.forEach(filterButton => filterButton.setAttribute('aria-pressed', String(filterButton.dataset.format === 'all')));
+      panel.setAttribute('aria-labelledby', activeTab.id); render();
+      document.getElementById('comparisons').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    wall.append(button);
   });
 }
 function selectTask(button) {
@@ -63,8 +102,13 @@ tabs.forEach((button, number) => {
     if (next !== undefined) { event.preventDefault(); tabs[next].focus(); selectTask(tabs[next]); }
   });
 });
-document.getElementById('previous-example').addEventListener('click', () => { index = (index + currentRows().length - 1) % currentRows().length; render(); });
-document.getElementById('next-example').addEventListener('click', () => { index = (index + 1) % currentRows().length; render(); });
+formatButtons.forEach(button => button.addEventListener('click', () => {
+  format = button.dataset.format; index = 0;
+  formatButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+  render();
+}));
+document.getElementById('previous-example').addEventListener('click', () => { const count = currentRows().length; if (count) { index = (index + count - 1) % count; render(); } });
+document.getElementById('next-example').addEventListener('click', () => { const count = currentRows().length; if (count) { index = (index + 1) % count; render(); } });
 document.getElementById('close-dialog').addEventListener('click', () => dialog.close());
 dialog.addEventListener('click', event => { const box = dialog.getBoundingClientRect(); if (event.target === dialog && (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom)) dialog.close(); });
 dialog.addEventListener('close', () => { document.body.style.overflow = ''; lastFocus?.focus(); });
@@ -73,4 +117,4 @@ document.getElementById('copy-citation').addEventListener('click', async () => {
   try { await navigator.clipboard.writeText(document.getElementById('bibtex').textContent); status.textContent = 'BibTeX copied.'; document.getElementById('copy-citation').textContent = 'Copied ✓'; setTimeout(() => { document.getElementById('copy-citation').textContent = 'Copy BibTeX ⧉'; }, 2200); }
   catch { const range = document.createRange(); range.selectNodeContents(document.getElementById('bibtex')); const selection = window.getSelection(); selection.removeAllRanges(); selection.addRange(range); status.textContent = 'Citation selected. Use your browser copy command.'; }
 });
-render();
+render(); renderWall();
