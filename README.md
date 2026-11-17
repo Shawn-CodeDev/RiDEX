@@ -1,6 +1,6 @@
 # RiDEx project page
 
-[Live website](https://shawn-codedev.github.io/RiDEX/)
+[Live website](https://gary.ac.cn/RiDEX/)
 
 A buildless research page: an interactive full-screen hero, the supplied four-task training
 comparison PDF, and matched Base / DiffusionNFT / RiDEx image comparisons.
@@ -27,8 +27,13 @@ Inter and italic Playfair Display are self-hosted with their OFL licenses.
   and CFG 4.5. Click an image to inspect it and switch methods.
 - `assets/comparison_manifest.json` records settings and checkpoint identities.
   Examples are selected, not aggregate win-rate evidence.
-- Native-1024 preference examples are new clean checkpoint inference. Alignment
-  examples retain native-512 original outputs. No AI upscaling or retouching.
+- The gallery contains 7 visually curated matched triplets (21 images), with
+  square, landscape and portrait filters and a clickable image wall. After review
+  of all 52 candidate sets, six new comparisons join one retained counting example;
+  ambiguous or worse cases are not included merely to increase the count.
+  Native formats include 1:1, 3:2, 2:3, 16:9 and 9:16. The original square examples
+  retain their native 512/1024 resolution.
+  No AI upscaling, cropping or retouching is applied to comparison images.
 - The hero crops both genuine model outputs identically for presentation.
   The gallery comparisons show complete, unaltered frames.
 

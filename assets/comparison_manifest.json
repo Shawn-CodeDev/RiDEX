@@ -3,12 +3,73 @@
   "note": "Selected qualitative examples; checkpoints are not training-budget matched.",
   "examples": [
     {
+      "id": "hps_skycastle",
+      "title": "Above the clouds",
+      "prompt": "An epic fantasy digital painting of a magnificent floating castle above the clouds, waterfalls spilling from its rocky island, elegant towers, soaring bridges and radiant sunset light, intricate architecture and a beautifully balanced panoramic composition.",
+      "reward": "hpsv2",
+      "seed": 123,
+      "width": 1280,
+      "height": 720,
+      "images": {
+        "Base": "assets/examples/hps_skycastle_base.webp",
+        "DiffusionNFT": "assets/examples/hps_skycastle_diffusionnft.webp",
+        "RiDEx": "assets/examples/hps_skycastle_ridex.webp"
+      },
+      "checkpoint": {
+        "DiffusionNFT": "hpsv2/standard_nft_checkpoint-50/lora",
+        "RiDEx": "hpsv2/fanft_checkpoint-130/lora"
+      },
+      "generation": {
+        "steps": 40,
+        "guidance_scale": 4.5,
+        "width": 1280,
+        "height": 720,
+        "seed": 123,
+        "sequence_length": 128,
+        "solver": "deterministic Euler",
+        "precision": "FP32 transformer/VAE; FP16 frozen text encoders; TF32 off",
+        "vae_tiling": true,
+        "retouching": false,
+        "native_resolution": true
+      }
+    },
+    {
+      "id": "pick_clockwork",
+      "title": "Clockwork bloom",
+      "prompt": "A highly detailed imaginative artwork of a mechanical hummingbird made of polished brass and intricate clockwork gears hovering beside a luminous glass flower, emerald and gold colors, delicate engraved details and a refined dark background.",
+      "reward": "pickscore",
+      "seed": 123,
+      "width": 720,
+      "height": 1280,
+      "images": {
+        "Base": "assets/examples/pick_clockwork_base.webp",
+        "DiffusionNFT": "assets/examples/pick_clockwork_diffusionnft.webp",
+        "RiDEx": "assets/examples/pick_clockwork_ridex.webp"
+      },
+      "checkpoint": {
+        "DiffusionNFT": "pickscore/standard_nft_checkpoint-370/lora",
+        "RiDEx": "pickscore/fanft_checkpoint-170/lora"
+      },
+      "generation": {
+        "steps": 40,
+        "guidance_scale": 4.5,
+        "width": 720,
+        "height": 1280,
+        "seed": 123,
+        "sequence_length": 128,
+        "solver": "deterministic Euler",
+        "precision": "FP32 transformer/VAE; FP16 frozen text encoders; TF32 off",
+        "vae_tiling": true,
+        "retouching": false,
+        "native_resolution": true
+      }
+    },
+    {
       "id": "geneval_apples",
       "title": "Five apples",
       "prompt": "a photo of five apples",
       "reward": "geneval",
       "seed": 42,
-      "resolution": 512,
       "images": {
         "Base": "assets/examples/geneval_apples_base.webp",
         "DiffusionNFT": "assets/examples/geneval_apples_diffusionnft.webp",
@@ -21,26 +82,30 @@
       "generation": {
         "steps": 40,
         "guidance_scale": 4.5,
-        "resolution": 512,
         "seed": 42,
         "sequence_length": 128,
         "solver": "deterministic Euler",
         "cfg": 4.5,
         "retouching": false,
-        "native_resolution": true
-      }
+        "native_resolution": true,
+        "width": 512,
+        "height": 512
+      },
+      "width": 512,
+      "height": 512
     },
     {
-      "id": "geneval_catdog",
-      "title": "Color binding",
-      "prompt": "a photo of a red cat and a blue dog",
+      "id": "geneval_horse_car",
+      "title": "Blue horse, red car",
+      "prompt": "a photo of a blue horse and a red car.",
       "reward": "geneval",
       "seed": 123,
-      "resolution": 512,
+      "width": 1152,
+      "height": 768,
       "images": {
-        "Base": "assets/examples/geneval_catdog_base.webp",
-        "DiffusionNFT": "assets/examples/geneval_catdog_diffusionnft.webp",
-        "RiDEx": "assets/examples/geneval_catdog_ridex.webp"
+        "Base": "assets/examples/geneval_horse_car_base.webp",
+        "DiffusionNFT": "assets/examples/geneval_horse_car_diffusionnft.webp",
+        "RiDEx": "assets/examples/geneval_horse_car_ridex.webp"
       },
       "checkpoint": {
         "DiffusionNFT": "geneval/standard_nft_checkpoint-300/lora",
@@ -49,182 +114,119 @@
       "generation": {
         "steps": 40,
         "guidance_scale": 4.5,
-        "resolution": 512,
+        "width": 1152,
+        "height": 768,
         "seed": 123,
         "sequence_length": 128,
         "solver": "deterministic Euler",
-        "cfg": 4.5,
+        "precision": "FP32 transformer/VAE; FP16 frozen text encoders; TF32 off",
+        "vae_tiling": true,
         "retouching": false,
         "native_resolution": true
       }
     },
     {
-      "id": "ocr_mug",
-      "title": "Good morning",
-      "prompt": "A ceramic coffee mug on a wooden table, printed with the words 'GOOD MORNING'.",
-      "reward": "ocr",
-      "seed": 123,
-      "resolution": 512,
-      "images": {
-        "Base": "assets/examples/ocr_mug_base.webp",
-        "DiffusionNFT": "assets/examples/ocr_mug_diffusionnft.webp",
-        "RiDEx": "assets/examples/ocr_mug_ridex.webp"
-      },
-      "checkpoint": {
-        "DiffusionNFT": "ocr/standard_nft_checkpoint-30/lora",
-        "RiDEx": "ocr/ridex_checkpoint-80/lora"
-      },
-      "generation": {
-        "steps": 40,
-        "guidance_scale": 4.5,
-        "resolution": 512,
-        "seed": 123,
-        "sequence_length": 128,
-        "solver": "deterministic Euler",
-        "cfg": 4.5,
-        "retouching": false,
-        "native_resolution": true
-      }
-    },
-    {
-      "id": "ocr_book",
-      "title": "The secret garden",
-      "prompt": "A red hardcover book titled 'THE SECRET GARDEN' on a wooden desk.",
-      "reward": "ocr",
-      "seed": 123,
-      "resolution": 512,
-      "images": {
-        "Base": "assets/examples/ocr_book_base.webp",
-        "DiffusionNFT": "assets/examples/ocr_book_diffusionnft.webp",
-        "RiDEx": "assets/examples/ocr_book_ridex.webp"
-      },
-      "checkpoint": {
-        "DiffusionNFT": "ocr/standard_nft_checkpoint-30/lora",
-        "RiDEx": "ocr/ridex_checkpoint-80/lora"
-      },
-      "generation": {
-        "steps": 40,
-        "guidance_scale": 4.5,
-        "resolution": 512,
-        "seed": 123,
-        "sequence_length": 128,
-        "solver": "deterministic Euler",
-        "cfg": 4.5,
-        "retouching": false,
-        "native_resolution": true
-      }
-    },
-    {
-      "id": "hps_alpine",
-      "title": "Alpine light",
-      "prompt": "An alpine cabin beside a turquoise lake, a wooden footbridge, snowy mountains, soft sunrise.",
-      "reward": "hpsv2",
-      "seed": 123,
-      "resolution": 1024,
-      "images": {
-        "Base": "assets/examples/hps_alpine_base.webp",
-        "DiffusionNFT": "assets/examples/hps_alpine_diffusionnft.webp",
-        "RiDEx": "assets/examples/hps_alpine_ridex.webp"
-      },
-      "checkpoint": {
-        "DiffusionNFT": "hpsv2/standard_nft_checkpoint-50/lora",
-        "RiDEx": "hpsv2/fanft_checkpoint-130/lora"
-      },
-      "generation": {
-        "steps": 40,
-        "guidance_scale": 4.5,
-        "resolution": 1024,
-        "seed": 123,
-        "sequence_length": 128,
-        "solver": "deterministic Euler",
-        "cfg": 4.5,
-        "retouching": false,
-        "native_resolution": true
-      }
-    },
-    {
-      "id": "hps_pastry",
-      "title": "Morning coffee",
-      "prompt": "A flaky croissant on a porcelain plate beside a cup of coffee, soft morning light.",
-      "reward": "hpsv2",
-      "seed": 123,
-      "resolution": 1024,
-      "images": {
-        "Base": "assets/examples/hps_pastry_base.webp",
-        "DiffusionNFT": "assets/examples/hps_pastry_diffusionnft.webp",
-        "RiDEx": "assets/examples/hps_pastry_ridex.webp"
-      },
-      "checkpoint": {
-        "DiffusionNFT": "hpsv2/standard_nft_checkpoint-50/lora",
-        "RiDEx": "hpsv2/fanft_checkpoint-130/lora"
-      },
-      "generation": {
-        "steps": 40,
-        "guidance_scale": 4.5,
-        "resolution": 1024,
-        "seed": 123,
-        "sequence_length": 128,
-        "solver": "deterministic Euler",
-        "cfg": 4.5,
-        "retouching": false,
-        "native_resolution": true
-      }
-    },
-    {
-      "id": "pickscore_1",
-      "title": "Coastal lighthouse",
-      "prompt": "A cinematic photograph of a lighthouse on a rocky coast, waves crashing below, warm sunset light breaking through storm clouds.",
-      "reward": "pickscore",
-      "seed": 123,
-      "resolution": 1024,
-      "images": {
-        "Base": "assets/examples/pickscore_1_base.webp",
-        "DiffusionNFT": "assets/examples/pickscore_1_diffusionnft.webp",
-        "RiDEx": "assets/examples/pickscore_1_ridex.webp"
-      },
-      "checkpoint": {
-        "DiffusionNFT": "pickscore/standard_nft_checkpoint-370/lora",
-        "RiDEx": "pickscore/fanft_checkpoint-170/lora"
-      },
-      "generation": {
-        "steps": 40,
-        "guidance_scale": 4.5,
-        "resolution": 1024,
-        "seed": 123,
-        "sequence_length": 128,
-        "solver": "deterministic Euler",
-        "cfg": 4.5,
-        "retouching": false,
-        "native_resolution": true
-      }
-    },
-    {
-      "id": "pickscore_2",
-      "title": "The watchmaker",
-      "prompt": "A portrait photograph of an elderly watchmaker at his workbench, intricate clockwork, soft window light, rich textures and shallow depth of field.",
-      "reward": "pickscore",
+      "id": "geneval_cat_above",
+      "title": "Above and below",
+      "prompt": "a photo of a green cat sitting above a red dog.",
+      "reward": "geneval",
       "seed": 42,
-      "resolution": 1024,
+      "width": 720,
+      "height": 1280,
       "images": {
-        "Base": "assets/examples/pickscore_2_base.webp",
-        "DiffusionNFT": "assets/examples/pickscore_2_diffusionnft.webp",
-        "RiDEx": "assets/examples/pickscore_2_ridex.webp"
+        "Base": "assets/examples/geneval_cat_above_base.webp",
+        "DiffusionNFT": "assets/examples/geneval_cat_above_diffusionnft.webp",
+        "RiDEx": "assets/examples/geneval_cat_above_ridex.webp"
       },
       "checkpoint": {
-        "DiffusionNFT": "pickscore/standard_nft_checkpoint-370/lora",
-        "RiDEx": "pickscore/fanft_checkpoint-170/lora"
+        "DiffusionNFT": "geneval/standard_nft_checkpoint-300/lora",
+        "RiDEx": "geneval/fanft_checkpoint-110/lora"
       },
       "generation": {
         "steps": 40,
         "guidance_scale": 4.5,
-        "resolution": 1024,
+        "width": 720,
+        "height": 1280,
         "seed": 42,
         "sequence_length": 128,
         "solver": "deterministic Euler",
-        "cfg": 4.5,
+        "precision": "FP32 transformer/VAE; FP16 frozen text encoders; TF32 off",
+        "vae_tiling": true,
+        "retouching": false,
+        "native_resolution": true
+      }
+    },
+    {
+      "id": "geneval_apples_tall42",
+      "title": "Five apples, tall frame",
+      "prompt": "a photo of five apples",
+      "reward": "geneval",
+      "seed": 42,
+      "width": 512,
+      "height": 768,
+      "images": {
+        "Base": "assets/examples/geneval_apples_tall42_base.webp",
+        "DiffusionNFT": "assets/examples/geneval_apples_tall42_diffusionnft.webp",
+        "RiDEx": "assets/examples/geneval_apples_tall42_ridex.webp"
+      },
+      "checkpoint": {
+        "DiffusionNFT": "geneval/standard_nft_checkpoint-300/lora",
+        "RiDEx": "geneval/fanft_checkpoint-110/lora"
+      },
+      "generation": {
+        "steps": 40,
+        "guidance_scale": 4.5,
+        "width": 512,
+        "height": 768,
+        "seed": 42,
+        "sequence_length": 128,
+        "solver": "deterministic Euler",
+        "precision": "FP32 transformer/VAE; FP16 frozen text encoders; TF32 off",
+        "vae_tiling": true,
+        "retouching": false,
+        "native_resolution": true
+      }
+    },
+    {
+      "id": "ocr_cinema",
+      "title": "Midnight cinema",
+      "prompt": "A vintage cinema facade at dusk with an illuminated marquee clearly reading 'MIDNIGHT CINEMA'.",
+      "reward": "ocr",
+      "seed": 123,
+      "width": 1152,
+      "height": 768,
+      "images": {
+        "Base": "assets/examples/ocr_cinema_base.webp",
+        "DiffusionNFT": "assets/examples/ocr_cinema_diffusionnft.webp",
+        "RiDEx": "assets/examples/ocr_cinema_ridex.webp"
+      },
+      "checkpoint": {
+        "DiffusionNFT": "ocr/standard_nft_checkpoint-30/lora",
+        "RiDEx": "ocr/ridex_checkpoint-80/lora"
+      },
+      "generation": {
+        "steps": 40,
+        "guidance_scale": 4.5,
+        "width": 1152,
+        "height": 768,
+        "seed": 123,
+        "sequence_length": 128,
+        "solver": "deterministic Euler",
+        "precision": "FP32 transformer/VAE; FP16 frozen text encoders; TF32 off",
+        "vae_tiling": true,
         "retouching": false,
         "native_resolution": true
       }
     }
-  ]
+  ],
+  "selection": "Visually curated examples; all methods share prompt, seed and inference settings. Not a random sample or a measured win rate.",
+  "selection_criteria": {
+    "hps_skycastle": "Panoramic framing of castle, island, bridge and waterfall; not a measured preference win.",
+    "pick_clockwork": "The complete mechanical subject and flower are contained in the frame, unlike the cut-off tails in the alternatives. Fantasy illustration, not anatomy evidence.",
+    "geneval_apples": "Five distinguishable apples, versus fewer in the two alternatives. Original edge clipping is preserved.",
+    "geneval_horse_car": "Both colored subjects are fully included, unlike substantial cropping in the alternatives. Color correctness is shared, not unique.",
+    "geneval_cat_above": "Both correctly colored bodies are shown and separated. The lower paw meets the frame edge; do not claim literally no clipping.",
+    "geneval_apples_tall42": "Five distinguishable apples in the portrait format, versus fewer in the alternatives. Outer apples meet the frame edges.",
+    "ocr_cinema": "Only RiDEx spells MIDNIGHT CINEMA correctly. This is a text-correctness claim, not an architectural-detail claim."
+  }
 }

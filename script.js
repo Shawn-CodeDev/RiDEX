@@ -34,8 +34,8 @@ function render() {
   index = Math.min(index, Math.max(0, rows.length - 1));
   const example = rows[index];
   document.getElementById('example-count').textContent = rows.length ? `${String(index + 1).padStart(2, '0')} / ${String(rows.length).padStart(2, '0')}` : '00 / 00';
-  document.getElementById('previous-example').disabled = !rows.length;
-  document.getElementById('next-example').disabled = !rows.length;
+  document.getElementById('previous-example').disabled = rows.length < 2;
+  document.getElementById('next-example').disabled = rows.length < 2;
   if (!example) {
     document.getElementById('example-prompt').textContent = 'No examples match this format.';
     document.getElementById('example-meta').textContent = '';
@@ -59,6 +59,8 @@ function render() {
     button.append(image, icon); button.addEventListener('click', () => showLarge(method)); figure.append(label, button); grid.append(figure);
   });
   const thumbnails = document.getElementById('example-thumbnails'); thumbnails.replaceChildren();
+  thumbnails.style.setProperty('--thumbnail-count', Math.min(6, rows.length));
+  thumbnails.style.setProperty('--thumbnail-mobile-count', Math.min(3, rows.length));
   rows.forEach((row, number) => {
     const button = document.createElement('button'); button.type = 'button'; button.setAttribute('aria-pressed', String(index === number)); button.setAttribute('aria-label', `Show example: ${row.title}`);
     const image = document.createElement('img'); image.src = row.images.RiDEx; image.alt = ''; image.width = row.width; image.height = row.height; image.loading = 'lazy';
