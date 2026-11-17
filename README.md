@@ -26,11 +26,11 @@ header. Inter and italic Playfair Display are self-hosted with their OFL license
   do not establish universal wins. Click an image to inspect it and switch methods.
 - `assets/comparison_manifest.json` records settings and checkpoint identities.
   Examples are selected, not aggregate win-rate evidence.
-- The main integration will include at least 10 matched examples per reward task,
+- The gallery includes 10 matched examples per reward task, 40 triplets / 120 images,
   with square, landscape and portrait filters and a clickable image wall. Examples
   are selected for inspection, not as aggregate performance evidence.
-  Native formats include 1:1, 3:2, 2:3, 16:9 and 9:16. The original square examples
-  retain their native 512/1024 resolution.
+  Native formats include 1:1, 3:2, 2:3, 16:9 and 9:16. Newly generated comparisons use
+  1152x768, 768x1152 and 1280x720 frames; retained cases keep their original pixels.
   No AI upscaling, cropping or retouching is applied to comparison images.
 - Gallery comparisons show complete, unaltered frames; the decorative hero art
   is separate from the experiment image set.

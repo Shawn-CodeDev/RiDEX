@@ -59,7 +59,7 @@ function render() {
     button.append(image, icon); button.addEventListener('click', () => showLarge(method)); figure.append(label, button); grid.append(figure);
   });
   const thumbnails = document.getElementById('example-thumbnails'); thumbnails.replaceChildren();
-  thumbnails.style.setProperty('--thumbnail-count', Math.min(6, rows.length));
+  thumbnails.style.setProperty('--thumbnail-count', Math.min(5, rows.length));
   thumbnails.style.setProperty('--thumbnail-mobile-count', Math.min(3, rows.length));
   rows.forEach((row, number) => {
     const button = document.createElement('button'); button.type = 'button'; button.setAttribute('aria-pressed', String(index === number)); button.setAttribute('aria-label', `Show example: ${row.title}`);
