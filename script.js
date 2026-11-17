@@ -60,7 +60,7 @@ function render() {
   });
   const thumbnails = document.getElementById('example-thumbnails'); thumbnails.replaceChildren();
   thumbnails.style.setProperty('--thumbnail-count', Math.min(5, rows.length));
-  thumbnails.style.setProperty('--thumbnail-mobile-count', Math.min(3, rows.length));
+  thumbnails.style.setProperty('--thumbnail-mobile-count', Math.min(2, rows.length));
   rows.forEach((row, number) => {
     const button = document.createElement('button'); button.type = 'button'; button.setAttribute('aria-pressed', String(index === number)); button.setAttribute('aria-label', `Show example: ${row.title}`);
     const image = document.createElement('img'); image.src = row.images.RiDEx; image.alt = ''; image.width = row.width; image.height = row.height; image.loading = 'lazy';
