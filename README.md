@@ -1,23 +1,29 @@
-# RiDEx — Reward-Informed Directional Exploration
+# RiDEx project page
 
-Project page for **RiDEx: Reward-Informed Directional Exploration for Diffusion Reinforcement Learning**.
+[Live website](https://shawn-codedev.github.io/RiDEX/)
 
-**Website:** https://shawn-codedev.github.io/RiDEX/
+A buildless research page: author-first hero, the supplied four-task training
+comparison PDF, and matched Base / DiffusionNFT / RiDEx image comparisons.
+No vector method explainer, duplicated result tables, or frontend framework.
 
-## Website design
+## Assets
 
-The site uses a fullscreen mosaic of original RiDEx generations, a three-stage method visualization, task-switchable H200 GPU-hour comparisons, sortable peak-reward results, a four-task credit ablation, eight draggable Base/RiDEx image comparisons, and the manuscript abstract and citation. Its visual direction is inspired by the DiffusionOPSD research website; the code and layout are written for RiDEx.
+- `assets/training_comparison.pdf` is the supplied paper figure, unchanged.
+  The WebP preview is rendered directly from the PDF without redrawing data.
+- Individual native-resolution images replace compressed paper-plate crops.
+  Every triplet uses the same prompt, seed, resolution, 40-step Euler sampler
+  and CFG 4.5. Click an image to inspect it and switch methods.
+- `assets/comparison_manifest.json` records settings and checkpoint identities.
+  Examples are selected, not aggregate win-rate evidence.
+- Native-1024 preference examples are new clean checkpoint inference. Alignment
+  examples retain native-512 original outputs. No AI upscaling or retouching.
+- The hero is a decorative crop of a real RiDEx output. Comparisons show full frames.
 
-`index.html`, `styles.css`, and `script.js` are standalone static files, with no external JavaScript or font dependencies. Four AVIF sprite sheets contain compressed crops from the author's qualitative PDF plates. Each row is a genuine Base/RiDEx pair; no new samples are generated for the site. Previous assets are retained in the repository.
+## Publishing
 
-## GitHub Pages
+GitHub Pages serves `main` from the repository root, without a build step or
+external JavaScript/font dependencies. `.nojekyll` is retained. Serve with any
+static HTTP server, or open `index.html` directly.
 
-Publish the **main** branch from **/(root)** in Settings → Pages. The `.nojekyll` file supports static serving. For local preview, run `python -m http.server 8000` from the repository and visit http://localhost:8000/.
-
-## Research content
-
-The text, author list, task mappings, and numerical results follow the supplied arXiv-source manuscript. CFG is framed by text–image alignment objectives; Grad is framed by differentiable reward paths. The 15× and 29× comparisons measure H200 GPU hours to a matched DiffusionNFT reward target, not generation latency. A public manuscript URL can be added when available; the site does not link to a nonexistent PDF.
-
-## Accessibility
-
-Responsive layouts, keyboard-operable task tabs and comparison sliders, an accessible mobile menu, a skip link, reduced-motion support, a motion toggle, horizontal table scrolling, and BibTeX copy with a fallback are included.
+On an HPC cluster, image processing, inference and browser tests belong on
+allocated compute nodes. This repository contains no weights or credentials.
