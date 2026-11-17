@@ -6,7 +6,7 @@
   <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#4d6b74"/></marker>
   <marker id="tealarrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#087f7b"/></marker>
   <style>
-  text{font-family:Arial,Helvetica,sans-serif;fill:#1c3544}
+  text{font-family:Arial,Helvetica,sans-serif}
   .head{font-size:18px;font-weight:800}.sub{font-size:12px;fill:#5a7280}.small{font-size:12px;fill:#536977}.tag{font-size:13px;font-weight:750}
   </style>
 </defs>
