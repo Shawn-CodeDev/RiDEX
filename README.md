@@ -2,6 +2,8 @@
 
 [Live website](https://gary.ac.cn/RiDEX/)
 
+[Paper on arXiv](https://arxiv.org/abs/2611.22052)
+
 A buildless research page: an editorial artwork hero, the abstract, the supplied
 four-task training comparison PDF, matched Base / DiffusionNFT / RiDEx image
 comparisons, and a citation.
