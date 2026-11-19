@@ -2,8 +2,14 @@
 <p align="center"><strong>Reward-Informed Directional Exploration for Diffusion Reinforcement Learning</strong></p>
 
 <p align="center">
-  Song Yan · Chenfeng Wang · Wei Zhai · Xingchen Wang · Tao Zhang<br>
-  Yawen Shao · Shi Pan · Min Li · Zheng-Jun Zha
+  Song Yan<sup>1</sup> · Chenfeng Wang<sup>1,2</sup> · Wei Zhai<sup>1,†</sup> · Xingchen Wang<sup>1</sup> · Tao Zhang<sup>3</sup><br>
+  Yawen Shao<sup>1,4</sup> · Shi Pan<sup>5</sup> · Min Li<sup>5,†</sup> · Zheng-Jun Zha<sup>1</sup>
+</p>
+<p align="center">
+  <sup>1</sup> University of Science and Technology of China · <sup>2</sup> Li Auto Inc.<br>
+  <sup>3</sup> Huazhong University of Science and Technology · <sup>4</sup> Tongyi Lab<br>
+  <sup>5</sup> Xi'an High-tech Research Institute<br>
+  <em>† Corresponding authors</em>
 </p>
 
 <p align="center">
