@@ -1,0 +1,26 @@
+# Local environments and credentials
+.env
+.env.*
+!.env.example
+.venv/
+.netrc
+__pycache__/
+.pytest_cache/
+
+# Experiment outputs; version the recipes, not their products.
+/outputs/
+/runs/
+/checkpoints/
+/logs/
+/wandb/
+/swanlog/
+slurm-*.out
+*.safetensors
+*.ckpt
+*.pth
+*.pt
+
+# Editor and OS metadata
+.vscode/
+.idea/
+.DS_Store

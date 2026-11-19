@@ -1,47 +1,56 @@
-# RiDEx project page
+<h1 align="center">RiDEx</h1>
+<p align="center"><strong>Reward-Informed Directional Exploration for Diffusion Reinforcement Learning</strong></p>
 
-[Live website](https://gary.ac.cn/RiDEX/)
+<p align="center">
+  Song Yan · Chenfeng Wang · Wei Zhai · Xingchen Wang · Tao Zhang<br>
+  Yawen Shao · Shi Pan · Min Li · Zheng-Jun Zha
+</p>
 
-[Paper on arXiv](https://arxiv.org/abs/2611.22052)
+<p align="center">
+  <a href="https://arxiv.org/abs/2611.22052"><strong>Paper</strong></a> &nbsp;·&nbsp;
+  <a href="https://gary.ac.cn/RiDEX/"><strong>Project page</strong></a> &nbsp;·&nbsp;
+  <a href="https://gary.ac.cn/RiDEX/#comparisons"><strong>Interactive gallery</strong></a> &nbsp;·&nbsp;
+  <a href="#citation"><strong>BibTeX</strong></a>
+</p>
 
-A buildless research page: an editorial artwork hero, the abstract, the supplied
-four-task training comparison PDF, matched Base / DiffusionNFT / RiDEx image
-comparisons, and a citation.
-No vector method explainer, duplicated result tables, or frontend framework.
-Page sequence: hero, abstract, results, generations, citation.
+**Which changes to a denoising step actually matter to the reward?** RiDEx starts two trajectories from the same diffusion state and nudges their velocities in opposite directions. Comparing the finished images tells the model which way to move at that state. The reward judges the images, not the proposed direction.
 
-## Hero
+**Release status:** The paper, training curves and 40 matched image comparisons are available now. The training implementation and runnable configurations are not yet public.
 
-`assets/hero-art.webp` is decorative editorial artwork, not a RiDEx or baseline
-model output and not evidence for the method. The paper title, full author list,
-and affiliations appear over the artwork's open upper field. `hero.css` owns the
-hero presentation; `navigation.js` owns the responsive navigation and scroll
-header. Inter and italic Playfair Display are self-hosted with their OFL licenses.
+## A matched comparison
 
-## Assets
+*Prompt excerpt: “exactly two red apples and one green pear.”* The three models receive the same complete prompt and seed. Base produces two fruits; DiffusionNFT produces three but swaps an apple for a pear. RiDEx gets both counts right in this example.
 
-- `assets/training_comparison.pdf` is the supplied paper figure, unchanged.
-  The WebP preview is rendered directly from the PDF without redrawing data.
-- Individual native-resolution images replace compressed paper-plate crops.
-  Every triplet matches prompt, seed, resolution, 40-step Euler sampler and CFG
-  4.5 across methods. These curated examples illustrate selected outcomes; they
-  do not establish universal wins. Click an image to inspect it and switch methods.
-- `assets/comparison_manifest.json` records settings and checkpoint identities.
-  Examples are selected, not aggregate win-rate evidence.
-- The gallery includes 10 matched examples per reward task, 40 triplets / 120 images,
-  with square, landscape and portrait filters and a clickable image wall. Examples
-  are selected for inspection, not as aggregate performance evidence.
-  Native formats include 1:1, 3:2, 2:3, 16:9 and 9:16. Newly generated comparisons use
-  1152x768, 768x1152 and 1280x720 frames; retained cases keep their original pixels.
-  No AI upscaling, cropping or retouching is applied to comparison images.
-- Gallery comparisons show complete, unaltered frames; the decorative hero art
-  is separate from the experiment image set.
+| Base · SD3.5 Medium | DiffusionNFT | RiDEx |
+| :---: | :---: | :---: |
+| ![Base: one red apple and one green fruit](assets/examples/expanded_g_apples_pears_base.webp) | ![DiffusionNFT: one red apple and two green pears](assets/examples/expanded_g_apples_pears_diffusionnft.webp) | ![RiDEx: two red apples and one green pear](assets/examples/expanded_g_apples_pears_ridex.webp) |
 
-## Publishing
+The [gallery](https://gary.ac.cn/RiDEX/#comparisons) contains ten selected prompts each for GenEval, OCR, HPSv2 and PickScore. Open any image to compare methods at native resolution. The [manifest](assets/comparison_manifest.json) records prompts, seeds and checkpoints; these examples are qualitative, not a preference win rate.
 
-GitHub Pages serves `main` from the repository root, without a build step or
-external JavaScript/font requests. `.nojekyll` is retained. Serve with any
-static HTTP server, or open `index.html` directly.
+## How RiDEx learns
 
-On an HPC cluster, image processing, inference and browser tests belong on
-allocated compute nodes. This repository contains no weights or credentials.
+1. **Propose a direction.** Use a conditional residual or a differentiable reward gradient to choose a small set of velocity directions worth testing.
+2. **Test it at the same state.** Apply opposite perturbations, finish both rollouts, and compare their terminal rewards. Either sign can win; a tie provides no directional preference.
+3. **Learn at two levels.** Use the signed difference to supervise the tested velocity direction at its source state. Use all generated images for the global DiffusionNFT update.
+
+## Training results
+
+[![Evaluation reward against H200 GPU hours for RiDEx and DiffusionNFT on GenEval, OCR, HPSv2 and PickScore](assets/training_comparison.webp)](assets/training_comparison.pdf)
+
+On SD3.5 Medium, the [paper](https://arxiv.org/abs/2611.22052) reports that RiDEx needs **1/15 of DiffusionNFT's H200 GPU hours on HPSv2** and **1/29 on PickScore** to reach the respective target scores. This compares compute to reach a score, not the speed of a training step. [View the vector figure (PDF)](assets/training_comparison.pdf).
+
+## Citation
+
+```bibtex
+@misc{yan2026ridexrewardinformeddirectionalexploration,
+  title={RiDEx: Reward-Informed Directional Exploration for Diffusion Reinforcement Learning},
+  author={Song Yan and Chenfeng Wang and Wei Zhai and Xingchen Wang and Tao Zhang and Yawen Shao and Shi Pan and Min Li and Zheng-Jun Zha},
+  year={2026},
+  eprint={2611.22052},
+  archivePrefix={arXiv},
+  primaryClass={cs.LG},
+  url={https://arxiv.org/abs/2611.22052},
+}
+```
+
+[Project page source and local preview](web/README.md)

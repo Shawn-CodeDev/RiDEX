@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "Please cite the RiDEx paper when referring to this work."
+title: RiDEx
+repository-code: "https://github.com/Shawn-CodeDev/RiDEX"
+url: "https://gary.ac.cn/RiDEX/"
+authors: &authors
+  - {given-names: Song, family-names: Yan}
+  - {given-names: Chenfeng, family-names: Wang}
+  - {given-names: Wei, family-names: Zhai}
+  - {given-names: Xingchen, family-names: Wang}
+  - {given-names: Tao, family-names: Zhang}
+  - {given-names: Yawen, family-names: Shao}
+  - {given-names: Shi, family-names: Pan}
+  - {given-names: Min, family-names: Li}
+  - {given-names: Zheng-Jun, family-names: Zha}
+preferred-citation:
+  type: article
+  title: "RiDEx: Reward-Informed Directional Exploration for Diffusion Reinforcement Learning"
+  authors: *authors
+  year: 2026
+  journal: arXiv
+  doi: 10.48550/arXiv.2611.22052
+  url: "https://arxiv.org/abs/2611.22052"
