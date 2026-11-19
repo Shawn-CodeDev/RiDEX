@@ -53,4 +53,8 @@ On SD3.5 Medium, the [paper](https://arxiv.org/abs/2611.22052) reports that RiDE
 }
 ```
 
+## License
+
+RiDEx code is available under the [MIT License](LICENSE). The bundled fonts retain their respective [OFL notices](assets/fonts/).
+
 [Project page source and local preview](web/README.md)
