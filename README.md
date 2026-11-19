@@ -22,6 +22,10 @@
 
 **Which changes to a denoising step actually matter to the reward?** RiDEx starts two trajectories from the same diffusion state and nudges their velocities in opposite directions. Comparing the finished images tells the model which way to move at that state. The reward judges the images, not the proposed direction.
 
+[![Main figure: isotropic versus reward-aligned exploration, the RiDEx state-matched update, and PickScore and HPSv2 learning curves](assets/main.png)](assets/main.pdf)
+
+*RiDEx changes how the model explores during training; inference still uses standard sampling.* [Full-resolution figure (PDF)](assets/main.pdf)
+
 **Release status:** The paper, training curves and 40 matched image comparisons are available now. The training implementation and runnable configurations are not yet public.
 
 ## A matched comparison
