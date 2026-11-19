@@ -7,10 +7,11 @@
 </p>
 
 <p align="center">
-  <a href="https://arxiv.org/abs/2611.22052"><strong>Paper</strong></a> &nbsp;·&nbsp;
-  <a href="https://gary.ac.cn/RiDEX/"><strong>Project page</strong></a> &nbsp;·&nbsp;
-  <a href="https://gary.ac.cn/RiDEX/#comparisons"><strong>Interactive gallery</strong></a> &nbsp;·&nbsp;
-  <a href="#citation"><strong>BibTeX</strong></a>
+  <a href="https://arxiv.org/abs/2611.22052"><img alt="Read the RiDEx paper on arXiv" src="https://img.shields.io/badge/arXiv-2611.22052-B33A40?logo=arxiv&amp;logoColor=white"></a>
+  <a href="https://gary.ac.cn/RiDEX/"><img alt="Visit the RiDEx project page" src="https://img.shields.io/badge/Project_Page-36715E?logo=github&amp;logoColor=white"></a>
+  <a href="https://gary.ac.cn/RiDEX/#comparisons"><img alt="Explore the visual comparisons" src="https://img.shields.io/badge/Visual_Gallery-536EA2?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSIzIiB5PSIzIiB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHJ4PSIyIi8%2BPGNpcmNsZSBjeD0iOSIgY3k9IjgiIHI9IjEiLz48cGF0aCBkPSJtMyAxNyA1LTUgNCA0IDQtNiA1IDciLz48L3N2Zz4%3D"></a>
+  <a href="#citation"><img alt="Get the BibTeX citation" src="https://img.shields.io/badge/BibTeX-705783?logo=latex&amp;logoColor=white"></a>
+  <a href="LICENSE"><img alt="Read the MIT License" src="https://img.shields.io/badge/License-MIT-596472"></a>
 </p>
 
 **Which changes to a denoising step actually matter to the reward?** RiDEx starts two trajectories from the same diffusion state and nudges their velocities in opposite directions. Comparing the finished images tells the model which way to move at that state. The reward judges the images, not the proposed direction.
