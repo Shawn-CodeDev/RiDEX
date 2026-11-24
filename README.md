@@ -84,7 +84,7 @@ Times are averaged over the first 120 epochs of each run. They include rollout, 
 
 ## License
 
-RiDEx code is available under the [MIT License](LICENSE). The bundled fonts retain their respective [OFL notices](assets/fonts/).
+Original RiDEx code is licensed under the [MIT License](LICENSE). The bundled fonts retain their respective [OFL notices](assets/fonts/).
 
 [Project page source and local preview](web/README.md)
 
@@ -112,3 +112,7 @@ We thank the authors of [Flow-GRPO](https://github.com/yifan123/flow_grpo) for s
   url={https://arxiv.org/abs/2509.16117},
 }
 ```
+
+### MixGRPO license
+
+The HPSv2 training implementation uses a sampler adapted from [MixGRPO](https://github.com/Tencent-Hunyuan/MixGRPO), copyright (c) 2025 Tencent. The sampler is not distributed in this repository yet. Material covered by the [MixGRPO License Terms](licenses/MixGRPO.txt) is limited to academic use and is not covered by RiDEx's MIT license. See the [upstream license](https://github.com/Tencent-Hunyuan/MixGRPO/blob/main/License.txt) for the full terms and third-party notices.
