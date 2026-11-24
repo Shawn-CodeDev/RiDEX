@@ -86,3 +86,28 @@ Times are averaged over the first 120 epochs of each run. They include rollout, 
 RiDEx code is available under the [MIT License](LICENSE). The bundled fonts retain their respective [OFL notices](assets/fonts/).
 
 [Project page source and local preview](web/README.md)
+
+## Acknowledgments
+
+We thank the authors of [Flow-GRPO](https://github.com/yifan123/flow_grpo) for sharing their diffusion RL codebase and the authors of [DiffusionNFT](https://github.com/NVlabs/DiffusionNFT) for sharing the forward-process training objective and its reference implementation.
+
+```bibtex
+@article{liu2025flow,
+  title={{Flow-GRPO}: Training Flow Matching Models via Online {RL}},
+  author={Liu, Jie and Liu, Gongye and Liang, Jiajun and Li, Yangguang and
+          Liu, Jiaheng and Wang, Xintao and Wan, Pengfei and Zhang, Di and Ouyang, Wanli},
+  journal={arXiv preprint arXiv:2505.05470},
+  year={2025},
+  url={https://arxiv.org/abs/2505.05470},
+}
+
+@article{zheng2025diffusionnft,
+  title={{DiffusionNFT}: Online Diffusion Reinforcement with Forward Process},
+  author={Zheng, Kaiwen and Chen, Huayu and Ye, Haotian and Wang, Haoxiang and
+          Zhang, Qinsheng and Jiang, Kai and Su, Hang and Ermon, Stefano and
+          Zhu, Jun and Liu, Ming-Yu},
+  journal={arXiv preprint arXiv:2509.16117},
+  year={2025},
+  url={https://arxiv.org/abs/2509.16117},
+}
+```
