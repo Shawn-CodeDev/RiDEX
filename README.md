@@ -111,10 +111,7 @@ bash submit.sh --dry-run diffusionnft
 After configuring `site.env`, submit the desired profile:
 
 ```bash
-# RiDEx: 576 images per epoch
 bash submit.sh --submit ridex
-
-# Standard DiffusionNFT: 1,152 clean images per epoch
 bash submit.sh --submit diffusionnft
 ```
 
