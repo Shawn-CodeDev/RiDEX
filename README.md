@@ -35,10 +35,6 @@ RiDEx thereby couples exploration-space selection with feedback about the change
 
 *RiDEx changes how the model explores during training; inference still uses standard sampling.* [Full-resolution figure (PDF)](assets/main.pdf)
 
-## Training code
-
-The [HPSv2 training guide](training/hpsv2/) includes two Slurm recipes for **16 NVIDIA H200 GPUs**: **RiDEx at 576 images/epoch** and **standard DiffusionNFT at 1,152 images/epoch**. Both use HPSv2.1. Model weights and prompt splits are not bundled.
-
 ## A matched comparison
 
 *Prompt excerpt: “exactly two red apples and one green pear.”* The three models receive the same complete prompt and seed. Base produces two fruits; DiffusionNFT produces three but swaps an apple for a pear. RiDEx gets both counts right in this example.
@@ -71,6 +67,63 @@ On **16 NVIDIA A800 GPUs**, RiDEx took **55.4% less wall time per epoch** than D
 | **RiDEx** | **576** | **7 min 27 s** |
 
 Times are averaged over the first 120 epochs of each run. They include rollout, reward scoring, and parameter updates, but exclude model loading, evaluation, and checkpoint writes. Both runs use HPSv2; the DiffusionNFT run also uses GenEval. The **2.24×** ratio compares epoch duration, not time to a target score.
+
+## Environment Setup
+
+The released trainer builds on [Flow-GRPO](https://github.com/yifan123/flow_grpo) and uses the [DiffusionNFT](https://github.com/NVlabs/DiffusionNFT) objective. Use an isolated Python 3.12 environment on a shared filesystem. The command below installs the CUDA 12.6 wheels; choose a [PyTorch wheel index](https://pytorch.org/get-started/previous-versions/) compatible with your driver.
+
+```bash
+git clone https://github.com/Shawn-CodeDev/RiDEX.git
+cd RiDEX/training/hpsv2
+
+conda create -n ridex python=3.12 pip
+conda activate ridex
+python -m pip install torch==2.12.0 torchvision==0.27.0 --index-url https://download.pytorch.org/whl/cu126
+python -m pip install -r requirements-train.txt
+python -m pip check
+```
+
+## Reward Preparation
+
+Both released profiles use **HPSv2.1**. The requirements install `hpsv2==1.2.0`. Download the SD3.5 Medium backbone and both reward checkpoints to storage visible from all training and scoring nodes. Accept the SD3.5 Medium model terms on Hugging Face before downloading it.
+
+```bash
+export ASSET_ROOT=/shared/path/to/ridex-assets
+hf auth login
+hf download stabilityai/stable-diffusion-3.5-medium --local-dir "$ASSET_ROOT/sd3.5-medium"
+hf download laion/CLIP-ViT-H-14-laion2B-s32B-b79K open_clip_pytorch_model.bin \
+  --local-dir "$ASSET_ROOT/reward_models/CLIP-ViT-H-14-laion2B-s32B-b79K"
+hf download xswu/HPSv2 HPS_v2.1_compressed.pt \
+  --local-dir "$ASSET_ROOT/reward_models/HPSv2"
+```
+
+Provide UTF-8 `train.txt` and `test.txt` prompt splits, one prompt per line. Use at least 48 training prompts to run both profiles. Weights and prompt splits are not bundled.
+
+## Training
+
+From `training/hpsv2`, copy the site template and set the Python path, shared asset paths (`SD3_MODEL`, `REWARD_MODEL_ROOT`, and `PROMPT_DATASET`), Slurm partitions, and `H200_GRES_TYPE`. The launcher uses `torchrun` with **16 H200s** (two nodes of eight by default). It starts a one-GPU reward service unless `HPSV2_REWARD_URLS` points to an existing compatible service. For experiment logging, authenticate with `wandb login` or set `WANDB_MODE=offline` or `disabled`.
+
+```bash
+cp site.env.example site.env
+bash submit.sh --dry-run ridex
+bash submit.sh --dry-run diffusionnft
+```
+
+After configuring `site.env`, submit the desired profile:
+
+```bash
+# RiDEx: 576 images per epoch
+bash submit.sh --submit ridex
+
+# Standard DiffusionNFT: 1,152 clean images per epoch
+bash submit.sh --submit diffusionnft
+```
+
+Add `--stop-after-updates 1` to run one complete training epoch at the selected budget. See the [training guide](training/hpsv2/) for service setup and checkpoint continuation.
+
+## Evaluation
+
+Both profiles evaluate the raw LoRA weights every **10 completed updates** on `test.txt`, using fixed seeds, **40 Euler steps**, and **CFG 4.5**. Evaluation is part of the training job; no separate launch is needed. The run directory contains `eval_<update>.json`, `metrics.jsonl`, and the LoRA checkpoints. The displayed HPSv2 score is cosine ×100; the raw cosine is logged separately.
 
 ## Citation
 
