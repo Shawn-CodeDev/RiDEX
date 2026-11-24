@@ -70,9 +70,10 @@ Times are averaged over the first 120 epochs of each run. They include rollout, 
 ## Citation
 
 ```bibtex
-@misc{yan2026ridexrewardinformeddirectionalexploration,
+@article{yan2026ridexrewardinformeddirectionalexploration,
   title={RiDEx: Reward-Informed Directional Exploration for Diffusion Reinforcement Learning},
   author={Song Yan and Chenfeng Wang and Wei Zhai and Xingchen Wang and Tao Zhang and Yawen Shao and Shi Pan and Min Li and Zheng-Jun Zha},
+  journal={arXiv preprint arXiv:2611.22052},
   year={2026},
   eprint={2611.22052},
   archivePrefix={arXiv},
