@@ -50,6 +50,17 @@ The [gallery](https://gary.ac.cn/RiDEX/#comparisons) contains ten selected promp
 
 On SD3.5 Medium, the [paper](https://arxiv.org/abs/2611.22052) reports that RiDEx needs **1/15 of DiffusionNFT's H200 GPU hours on HPSv2** and **1/29 on PickScore** to reach the respective target scores. This compares compute to reach a score, not the speed of a training step. [View the vector figure (PDF)](assets/training_comparison.pdf).
 
+### HPSv2 epoch timing
+
+On **16 NVIDIA A800 GPUs**, RiDEx took **55.4% less wall time per epoch** than DiffusionNFT in these runs.
+
+| Method | Images per epoch | Mean time per epoch |
+| :--- | ---: | ---: |
+| DiffusionNFT | 1,152 | 16 min 43 s |
+| **RiDEx** | **576** | **7 min 27 s** |
+
+Times are averaged over the first 120 epochs of each run. They include rollout, reward scoring, and parameter updates, but exclude model loading, evaluation, and checkpoint writes. Both runs use HPSv2; the DiffusionNFT run also uses GenEval. The **2.24×** ratio compares epoch duration, not time to a target score.
+
 ## Citation
 
 ```bibtex
