@@ -15,6 +15,7 @@
 <p align="center">
   <a href="https://arxiv.org/abs/2611.22052"><img alt="Read the RiDEx paper on arXiv" src="https://img.shields.io/badge/arXiv-2611.22052-B33A40?logo=arxiv&amp;logoColor=white"></a>
   <a href="https://gary.ac.cn/RiDEX/"><img alt="Visit the RiDEx project page" src="https://img.shields.io/badge/Project_Page-36715E?logo=github&amp;logoColor=white"></a>
+  <a href="training/hpsv2/"><img alt="HPSv2 training code and H200 recipes" src="https://img.shields.io/badge/HPSv2_Training-25676B"></a>
   <a href="https://gary.ac.cn/RiDEX/#comparisons"><img alt="Explore the visual comparisons" src="https://img.shields.io/badge/Visual_Gallery-536EA2?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSIzIiB5PSIzIiB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHJ4PSIyIi8%2BPGNpcmNsZSBjeD0iOSIgY3k9IjgiIHI9IjEiLz48cGF0aCBkPSJtMyAxNyA1LTUgNCA0IDQtNiA1IDciLz48L3N2Zz4%3D"></a>
   <a href="#citation"><img alt="Get the BibTeX citation" src="https://img.shields.io/badge/BibTeX-705783?logo=latex&amp;logoColor=white"></a>
   <a href="LICENSE"><img alt="Read the MIT License" src="https://img.shields.io/badge/License-MIT-596472"></a>
@@ -33,6 +34,10 @@ RiDEx thereby couples exploration-space selection with feedback about the change
 [![Main figure: isotropic versus reward-aligned exploration, the RiDEx state-matched update, and PickScore and HPSv2 learning curves](assets/main.png)](assets/main.pdf)
 
 *RiDEx changes how the model explores during training; inference still uses standard sampling.* [Full-resolution figure (PDF)](assets/main.pdf)
+
+## Training code
+
+The [HPSv2 training guide](training/hpsv2/) includes two Slurm recipes for **16 NVIDIA H200 GPUs**: **RiDEx at 576 images/epoch** and **standard DiffusionNFT at 1,152 images/epoch**. Both use HPSv2.1. Model weights and prompt splits are not bundled.
 
 ## A matched comparison
 
@@ -115,4 +120,4 @@ We thank the authors of [Flow-GRPO](https://github.com/yifan123/flow_grpo) for s
 
 ### MixGRPO license
 
-The HPSv2 training implementation uses a sampler adapted from [MixGRPO](https://github.com/Tencent-Hunyuan/MixGRPO), copyright (c) 2025 Tencent. The sampler is not distributed in this repository yet. Material covered by the [MixGRPO License Terms](licenses/MixGRPO.txt) is limited to academic use and is not covered by RiDEx's MIT license. See the [upstream license](https://github.com/Tencent-Hunyuan/MixGRPO/blob/main/License.txt) for the full terms and third-party notices.
+The HPSv2 trainer includes a [sampler](training/hpsv2/flow_grpo/diffusers_patch/solver.py) adapted from [MixGRPO](https://github.com/Tencent-Hunyuan/MixGRPO), copyright (c) 2025 Tencent. Material covered by the [MixGRPO License Terms](licenses/MixGRPO.txt) is limited to academic use and is not covered by RiDEx's MIT license. See the [training code's third-party notices](training/hpsv2/THIRD_PARTY_NOTICES.md) for component details.

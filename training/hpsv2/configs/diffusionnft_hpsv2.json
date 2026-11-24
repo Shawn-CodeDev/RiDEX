@@ -1,0 +1,12 @@
+{
+  "method": "DiffusionNFT",
+  "dataset": "data/prompts",
+  "prompts_per_epoch": 48,
+  "clean_per_prompt": 24,
+  "centers_per_prompt": 0,
+  "learning_rate": 0.0003,
+  "epochs": 500,
+  "save_freq": 10,
+  "eval_freq": 10,
+  "seed": 42
+}

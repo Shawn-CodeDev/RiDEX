@@ -1,0 +1,13 @@
+{
+  "dataset": "data/prompts",
+  "prompts_per_epoch": 16,
+  "clean_per_prompt": 32,
+  "centers_per_prompt": 2,
+  "action_step": 8,
+  "action_radius": 0.005,
+  "learning_rate": 0.0003,
+  "epochs": 500,
+  "save_freq": 10,
+  "eval_freq": 10,
+  "seed": 42
+}

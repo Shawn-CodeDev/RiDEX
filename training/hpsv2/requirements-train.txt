@@ -1,0 +1,14 @@
+diffusers==0.38.0
+transformers==5.10.2
+peft==0.19.1
+accelerate==1.13.0
+hpsv2==1.2.0
+open-clip-torch==3.3.0
+wandb==0.25.0
+numpy==2.4.6
+Pillow==12.2.0
+requests==2.34.2
+sentencepiece==0.2.1
+protobuf==5.29.6
+safetensors==0.8.0rc1
+tqdm==4.68.1
