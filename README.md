@@ -20,6 +20,12 @@
   <a href="LICENSE"><img alt="Read the MIT License" src="https://img.shields.io/badge/License-MIT-596472"></a>
 </p>
 
+## 📢 News
+
+- **[Upcoming]** 🚀 Model checkpoint release.
+- **[2026-11-24]** 💻 Released [HPSv2 training and evaluation code](training/hpsv2/) for RiDEx and DiffusionNFT.
+- **[2026-11-17]** 📄 Submitted the RiDEx preprint to [arXiv](https://arxiv.org/abs/2611.22052).
+
 ## Abstract
 
 Reward-based diffusion post-training updates model parameters from task rewards. While existing approaches improve sampling and policy optimization, they still rely largely on isotropic random perturbations in a high-dimensional latent space for exploration. Such variation often spends the perturbation budget on changes with little influence on the target reward, making exploration inefficient. We study where diffusion models should explore and how to learn from that exploration.
