@@ -7,7 +7,7 @@
 .sphere-tools button,.sphere-selection select,.sphere-open{transition:background-color 160ms ease,border-color 160ms ease,box-shadow 160ms ease,transform 160ms ease}
 .sphere-tools svg,.sphere-open svg{width:18px;height:18px;flex-shrink:0}
 #sphere-toggle[aria-pressed=true] .play-symbol,#sphere-toggle[aria-pressed=false] .pause-symbol{display:none}
-.gallery-sphere{position:relative;width:100%;height:clamp(420px,54vw,700px);overflow:hidden;isolation:isolate;background:#000}
+.gallery-sphere{position:relative;width:100%;height:clamp(420px,54vw,700px);overflow:hidden;isolation:isolate}
 .gallery-sphere canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab;outline-offset:-5px}
 .gallery-sphere canvas:active{cursor:grabbing}
 .gallery-sphere canvas:focus-visible{outline:2px solid var(--accent)}

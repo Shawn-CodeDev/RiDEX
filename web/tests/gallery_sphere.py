@@ -8,7 +8,7 @@ from pathlib import Path
 import socket
 import threading
 
-from PIL import Image, ImageChops
+from PIL import Image, ImageChops, ImageColor
 from playwright.sync_api import sync_playwright
 
 
@@ -63,8 +63,13 @@ def verify_viewport(browser, name, width, height, report, mobile=False):
     assert stage.locator("canvas").count() == 1
     assert int(stage.get_attribute("data-loaded-count")) == expected_count
     screenshot = Image.open(io.BytesIO(stage.locator("canvas").screenshot(
-        path=str(OUTPUT / f"canvas_initial_{name}.png")))).convert("L")
-    bounds = screenshot.point(lambda value: 255 if value >= 24 else 0).getbbox()
+        path=str(OUTPUT / f"canvas_initial_{name}.png")))).convert("RGB")
+    page_color = ImageColor.getrgb(page.evaluate("getComputedStyle(document.body).backgroundColor"))
+    background = Image.new("RGB", screenshot.size, page_color)
+    difference = ImageChops.difference(screenshot, background)
+    assert all(difference.getpixel((x, y)) == (0, 0, 0)
+               for x in (2, screenshot.width - 3) for y in (2, screenshot.height - 3))
+    bounds = difference.convert("L").point(lambda value: 255 if value >= 12 else 0).getbbox()
     assert bounds and 3 < bounds[0] < bounds[2] < screenshot.width - 3, bounds
     assert 3 < bounds[1] < bounds[3] < screenshot.height - 3, bounds
     stage.locator("..").screenshot(path=str(OUTPUT / f"sphere_initial_{name}.png"))
@@ -193,9 +198,10 @@ def verify_auto_rotation(browser, report):
     assert toggle.get_attribute("aria-pressed") == "true"
     toggle.click()
     assert toggle.get_attribute("aria-pressed") == "false"
-    stopped = canvas.screenshot()
-    page.wait_for_timeout(500)
-    assert canvas.screenshot() == stopped, "Sphere continued rotating after Pause"
+    page.wait_for_timeout(850)
+    stopped = stage.get_attribute("data-frames")
+    page.wait_for_timeout(350)
+    assert stage.get_attribute("data-frames") == stopped, "Sphere kept rendering after Pause"
     assert not errors, errors
     select = page.locator('#sphere-select')
     select.select_option(page.evaluate('window.RIDEX_EXAMPLES[14].id'))
