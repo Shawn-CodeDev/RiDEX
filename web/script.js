@@ -6,7 +6,7 @@ const formatButtons = [...document.querySelectorAll('[data-format]')];
 const grid = document.getElementById('comparison-grid');
 const panel = document.getElementById('comparison-panel');
 const dialog = document.getElementById('image-dialog');
-let task = 'geneval', format = 'all', index = 0, lastFocus;
+let task = 'geneval', format = 'all', index = 0, lastFocus, dialogExample;
 function formatOf(row) { return row.width === row.height ? 'square' : row.width > row.height ? 'landscape' : 'portrait'; }
 function currentRows() { return examples.filter(row => row.reward === task && (format === 'all' || formatOf(row) === format)); }
 function currentExample() { return currentRows()[index]; }
@@ -15,8 +15,9 @@ function dimensions(row) {
   while (b) [a, b] = [b, a % b];
   return `${row.width} × ${row.height} · ${row.width / a}:${row.height / a} · Seed ${row.seed}`;
 }
-function showLarge(method) {
-  const example = currentExample();
+function showLarge(method, example = dialog.open ? dialogExample : currentExample()) {
+  if (!example) return;
+  dialogExample = example;
   document.getElementById('dialog-title').textContent = method === 'Base' ? 'Base · SD3.5 Medium' : method;
   document.getElementById('dialog-prompt').textContent = example.prompt;
   const image = document.getElementById('dialog-image');
@@ -68,25 +69,20 @@ function render() {
     button.addEventListener('click', () => { index = number; render(); thumbnails.children[number].focus({preventScroll: true}); }); thumbnails.append(button);
   });
 }
-function renderWall() {
-  const wall = document.getElementById('gallery-wall'); wall.replaceChildren();
-  document.getElementById('wall-count').textContent = `${examples.length} examples`;
-  examples.forEach(row => {
-    const button = document.createElement('button'); button.type = 'button'; button.className = 'wall-item';
-    button.setAttribute('aria-label', `Compare ${row.title}, ${row.reward}`);
-    const image = document.createElement('img'); image.src = row.images.RiDEx; image.alt = ''; image.width = row.width; image.height = row.height; image.loading = 'lazy'; image.decoding = 'async';
-    const title = document.createElement('span'); title.textContent = row.title;
-    button.append(image, title);
-    button.addEventListener('click', () => {
-      task = row.reward; format = 'all'; index = examples.filter(item => item.reward === task).indexOf(row);
-      const activeTab = tabs.find(tab => tab.dataset.task === task);
-      tabs.forEach(tab => { const selected = tab === activeTab; tab.setAttribute('aria-selected', String(selected)); tab.tabIndex = selected ? 0 : -1; });
-      formatButtons.forEach(filterButton => filterButton.setAttribute('aria-pressed', String(filterButton.dataset.format === 'all')));
-      panel.setAttribute('aria-labelledby', activeTab.id); render();
-      document.getElementById('comparisons').scrollIntoView({ behavior: 'smooth', block: 'start' });
+function prepareSphere() {
+  const stage = document.getElementById('gallery-sphere');
+  document.getElementById('sphere-count').textContent = `${examples.length} images`;
+  const observer = new IntersectionObserver(entries => {
+    if (!entries.some(entry => entry.isIntersecting)) return;
+    observer.disconnect();
+    import('./gallery-sphere.js').then(({ createGallerySphere }) => {
+      createGallerySphere(stage, examples, row => showLarge('RiDEx', row));
+    }).catch(() => {
+      stage.dataset.state = 'error'; stage.setAttribute('aria-busy', 'false');
+      document.getElementById('sphere-status').textContent = 'The gallery could not load. Please reload the page.';
     });
-    wall.append(button);
-  });
+  }, { rootMargin: '500px' });
+  observer.observe(stage);
 }
 function selectTask(button) {
   task = button.dataset.task; index = 0;
@@ -119,4 +115,4 @@ document.getElementById('copy-citation').addEventListener('click', async () => {
   try { await navigator.clipboard.writeText(document.getElementById('bibtex').textContent); status.textContent = 'BibTeX copied.'; document.getElementById('copy-citation').textContent = 'Copied ✓'; setTimeout(() => { document.getElementById('copy-citation').textContent = 'Copy BibTeX ⧉'; }, 2200); }
   catch { const range = document.createRange(); range.selectNodeContents(document.getElementById('bibtex')); const selection = window.getSelection(); selection.removeAllRanges(); selection.addRange(range); status.textContent = 'Citation selected. Use your browser copy command.'; }
 });
-render(); renderWall();
+render(); prepareSphere();

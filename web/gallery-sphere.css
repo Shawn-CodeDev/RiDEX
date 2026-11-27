@@ -1,0 +1,30 @@
+.generation-sphere-section{margin-top:52px;padding-top:26px;border-top:1px solid var(--line)}
+.sphere-heading{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.sphere-heading>div:first-child{display:flex;align-items:baseline;gap:16px}
+.sphere-heading h3{font-size:24px;font-weight:500}
+#sphere-count{color:var(--muted);font-size:13px}
+.sphere-tools{display:flex;gap:8px}
+.sphere-tools svg,.sphere-open svg{width:18px;height:18px;flex-shrink:0}
+#sphere-toggle[aria-pressed=true] .play-symbol,#sphere-toggle[aria-pressed=false] .pause-symbol{display:none}
+.gallery-sphere{position:relative;width:100%;height:clamp(420px,54vw,700px);overflow:hidden;isolation:isolate}
+.gallery-sphere canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab;outline-offset:-5px}
+.gallery-sphere canvas:active{cursor:grabbing}
+.gallery-sphere canvas:focus-visible{outline:2px solid var(--accent)}
+#sphere-status{position:absolute;inset:0;display:grid;place-content:center;z-index:1;margin:0;padding:30px;pointer-events:none;text-align:center;font-size:14px;color:var(--muted)}
+#sphere-status[hidden]{display:none}
+#sphere-tooltip{position:absolute;z-index:2;max-width:min(280px,80%);padding:8px 12px;border:1px solid var(--line);border-radius:5px;background:#101512ee;color:var(--ink);font-size:13px;line-height:1.4;pointer-events:none}
+.sphere-selection{display:flex;gap:14px;align-items:center;max-width:620px;margin:0 auto;padding:10px 0 0}
+.sphere-selection select{min-width:0;flex:1;width:100%;min-height:44px;padding:10px 34px 10px 14px;border:1px solid var(--line);border-radius:5px;background:#1b211c;color:var(--ink);font:inherit;font-size:14px;text-overflow:ellipsis;color-scheme:dark}
+.sphere-selection select:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.sphere-open{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:44px;flex-shrink:0;padding:10px 16px;border:1px solid #637a64;border-radius:5px;background:#c5dbc2;color:#152019;font-size:14px;font-weight:550}
+.sphere-open:hover{background:#d7e8d5}
+.sphere-tools button:disabled,.sphere-selection button:disabled,.sphere-selection select:disabled{opacity:.4;cursor:default}
+@media(max-width:680px){
+  .generation-sphere-section{margin-top:36px;padding-top:20px}
+  .sphere-heading{gap:10px}.sphere-heading>div:first-child{display:block}
+  .sphere-heading h3{font-size:21px}#sphere-count{font-size:12px}
+  .gallery-sphere{height:440px}
+  .sphere-selection{gap:8px}.sphere-selection select{font-size:13px;padding-left:10px}
+  .sphere-open{padding:10px 12px;font-size:13px;gap:8px}
+}
+@media(max-width:360px){.gallery-sphere{height:380px}.sphere-open{padding:10px}.sphere-open svg{display:none}}

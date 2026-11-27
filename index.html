@@ -16,10 +16,11 @@
   <link rel="icon" type="image/svg+xml" href="web/favicon.svg">
   <link rel="preload" as="image" href="assets/hero-art.webp">
   <link rel="preload" as="font" type="font/ttf" href="assets/fonts/PlayfairDisplay-Italic.ttf" crossorigin>
-  <link rel="stylesheet" href="web/styles.css">
+  <link rel="stylesheet" href="web/styles.css?v=sphere1">
   <link rel="stylesheet" href="web/hero.css">
+  <link rel="stylesheet" href="web/gallery-sphere.css">
   <script src="assets/examples.js?v=5" defer></script>
-  <script src="web/script.js" defer></script>
+  <script src="web/script.js?v=sphere1" defer></script>
   <script src="web/navigation.js" defer></script>
 </head>
 <body>
@@ -64,7 +65,25 @@
       </div>
       <div class="format-filter" role="group" aria-label="Filter by image format"><span>Format</span><button type="button" data-format="all" aria-pressed="true">All</button><button type="button" data-format="square" aria-pressed="false">Square</button><button type="button" data-format="landscape" aria-pressed="false">Landscape</button><button type="button" data-format="portrait" aria-pressed="false">Portrait</button></div>
       <div id="comparison-panel" role="tabpanel" aria-labelledby="tab-geneval"><div class="example-heading"><p id="example-prompt">a photo of five apples</p><span id="example-meta"></span></div><div class="comparison-grid" id="comparison-grid"></div><div class="example-thumbnails" id="example-thumbnails" role="group" aria-label="Choose an example"></div></div>
-      <div class="gallery-wall-section"><div class="gallery-wall-heading"><h3>More generations</h3><span id="wall-count"></span></div><div class="gallery-wall" id="gallery-wall" aria-label="All generated RiDEx examples"></div></div>
+      <section class="generation-sphere-section" aria-labelledby="sphere-heading">
+        <div class="sphere-heading">
+          <div><h3 id="sphere-heading">More generations</h3><span id="sphere-count"></span></div>
+          <div class="sphere-tools">
+            <button type="button" class="icon-button" id="sphere-toggle" aria-label="Pause rotation" aria-pressed="true" title="Pause rotation" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path class="pause-symbol" d="M9 5v14M15 5v14"/><path class="play-symbol" d="m9 5 10 7-10 7Z"/></svg></button>
+            <button type="button" class="icon-button" id="sphere-reset" aria-label="Reset view" title="Reset view" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 11a9 9 0 1 1 2.6 7.4M3 4v7h7"/></svg></button>
+          </div>
+        </div>
+        <div id="gallery-sphere" class="gallery-sphere" data-state="loading" role="region" aria-label="Interactive sphere of generated images" aria-busy="true">
+          <p id="sphere-status" role="status">Loading gallery...</p>
+          <span id="sphere-tooltip" hidden></span>
+        </div>
+        <div class="sphere-selection">
+          <label class="sr-only" for="sphere-select">Choose a generation</label>
+          <select id="sphere-select" disabled><option>Loading gallery...</option></select>
+          <span id="sphere-title" class="sr-only" role="status"></span>
+          <button type="button" class="sphere-open" id="sphere-open" disabled>View image <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button>
+        </div>
+      </section>
       <noscript><p>Enable JavaScript to switch examples. <a href="assets/comparison_manifest.json">View the image manifest</a>.</p></noscript>
     </section>
     <section class="citation section" id="citation" aria-labelledby="citation-title">

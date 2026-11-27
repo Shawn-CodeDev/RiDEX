@@ -45,7 +45,6 @@ h2{font-size:34px;line-height:1.2;font-weight:550;margin:0}
 .example-thumbnails button{border:1px solid transparent;padding:4px;border-radius:4px;background:transparent;display:flex;min-width:0;align-items:center;gap:8px;text-align:left;color:var(--muted)}
 .example-thumbnails button[aria-pressed=true]{border-color:#829881;color:var(--ink)}
 .example-thumbnails img{width:42px;height:42px;object-fit:contain;border-radius:2px;flex:0 0 auto}.example-thumbnails span{font-size:11px;line-height:1.3;min-width:0;overflow-wrap:anywhere}
-.gallery-wall-section{margin-top:48px;border-top:1px solid var(--line);padding-top:20px}.gallery-wall-heading{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px}.gallery-wall-heading h3{font-size:15px}.gallery-wall-heading span{font-size:11px;color:var(--muted)}.gallery-wall{columns:4;column-gap:16px}.wall-item{display:inline-flex;flex-direction:column;align-items:stretch;gap:6px;width:100%;break-inside:avoid;margin:0 0 16px;min-width:0;padding:0;border:0;background:transparent;text-align:left;color:var(--ink)}.wall-item img{width:100%;height:auto;aspect-ratio:auto;object-fit:contain;background:#f3f4f1;border-radius:2px}.wall-item span{font-size:11px;line-height:1.35;color:var(--muted);overflow-wrap:anywhere}.wall-item:hover span{color:var(--accent)}.wall-item:focus-visible{outline-offset:3px}
 .abstract{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding-block:44px}
 .abstract .eyebrow{margin-bottom:12px}.abstract h2{font-size:28px}
 .abstract-text{max-width:900px;font-size:20px;color:#bdc4bc;line-height:1.75;margin:20px 0 0}
@@ -62,7 +61,6 @@ dialog::backdrop{background:rgba(0,0,0,.82)}.dialog-toolbar{display:flex;align-i
 .dialog-methods{display:flex;justify-content:center;gap:8px;margin-top:17px}.dialog-methods button{border:1px solid var(--line);background:#1b211c;padding:8px 14px;border-radius:4px;font-size:12px}
 .dialog-methods button[aria-pressed=true]{background:#c5dbc2;color:#152019}
 @media(max-width:1000px){
-  .gallery-wall{columns:3}
   .section{padding-block:58px}h2{font-size:29px}.abstract-text{font-size:18px}.comparison-grid{gap:10px}
   #example-meta{white-space:normal;max-width:120px;text-align:right;flex-shrink:0}
 }
@@ -78,7 +76,6 @@ dialog::backdrop{background:rgba(0,0,0,.82)}.dialog-toolbar{display:flex;align-i
   .comparison-grid{gap:6px}.comparison-grid.portrait-comparison{max-width:100%}.method-label{font-size:10px;padding-bottom:8px}.method-label small{display:none}.image-button{border-radius:2px}
   .zoom-icon{width:25px;height:25px;bottom:5px;right:5px;font-size:15px}
   .example-thumbnails{grid-template-columns:repeat(var(--thumbnail-mobile-count),minmax(0,1fr));margin-top:16px;gap:6px}.example-thumbnails img{width:32px;height:40px}.example-thumbnails span{font-size:10px;padding:0}.example-thumbnails button{gap:5px;padding:3px;align-items:center}
-  .gallery-wall-section{margin-top:34px;padding-top:16px}.gallery-wall{columns:2;column-gap:10px}.wall-item{margin-bottom:12px}.wall-item span{font-size:10px}
   pre{font-size:10px;padding:17px}
   footer{gap:16px;font-size:10px;padding-block:25px}footer p{max-width:140px;text-align:center}
   dialog{padding:15px;max-width:96vw}.dialog-toolbar p{font-size:11px}.dialog-methods button{padding:8px 12px}
