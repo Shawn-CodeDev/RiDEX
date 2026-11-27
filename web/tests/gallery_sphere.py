@@ -56,16 +56,17 @@ def verify_viewport(browser, name, width, height, report, mobile=False):
     page.goto(f"http://127.0.0.1:{SERVER.server_port}/", wait_until="networkidle")
 
     stage = page.locator("#gallery-sphere")
-    stage.scroll_into_view_if_needed()
+    stage.evaluate("node => node.scrollIntoView({block: 'center', behavior: 'instant'})")
     page.wait_for_function("document.querySelector('#gallery-sphere')?.dataset.state === 'ready'", timeout=60_000)
     page.wait_for_function("window.RIDEX_EXAMPLES?.length > 0")
     expected_count = page.evaluate("window.RIDEX_EXAMPLES.length")
     assert stage.locator("canvas").count() == 1
     assert int(stage.get_attribute("data-loaded-count")) == expected_count
-    screenshot = Image.open(io.BytesIO(stage.locator("canvas").screenshot())).convert("RGB")
-    bounds = screenshot.getbbox()
-    assert bounds and 3 < bounds[0] < bounds[2] < screenshot.width - 3
-    assert 3 < bounds[1] < bounds[3] < screenshot.height - 3
+    screenshot = Image.open(io.BytesIO(stage.locator("canvas").screenshot(
+        path=str(OUTPUT / f"canvas_initial_{name}.png")))).convert("L")
+    bounds = screenshot.point(lambda value: 255 if value >= 24 else 0).getbbox()
+    assert bounds and 3 < bounds[0] < bounds[2] < screenshot.width - 3, bounds
+    assert 3 < bounds[1] < bounds[3] < screenshot.height - 3, bounds
     stage.locator("..").screenshot(path=str(OUTPUT / f"sphere_initial_{name}.png"))
 
     select = page.locator("#sphere-select")
