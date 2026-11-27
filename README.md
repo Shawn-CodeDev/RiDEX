@@ -22,7 +22,7 @@
 
 ## 📢 News
 
-- **[Upcoming]** 🚀 Model checkpoint release.
+- **[Upcoming]** 🚀 Training and inference code for PickScore, GenEval, and OCR; training and inference support for FLUX.1 [dev] and Wan T2V.
 - **[2026-11-24]** 💻 Released [HPSv2 training and evaluation code](training/hpsv2/) for RiDEx and DiffusionNFT.
 - **[2026-11-17]** 📄 Submitted the RiDEx preprint to [arXiv](https://arxiv.org/abs/2611.22052).
 
