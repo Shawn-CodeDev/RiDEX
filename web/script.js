@@ -1,35 +1,20 @@
-'use strict';
+import { createImageViewer } from './image-viewer.js';
+
 const examples = window.RIDEX_EXAMPLES || [];
 const methods = ['Base', 'DiffusionNFT', 'RiDEx'];
 const tabs = [...document.querySelectorAll('[data-task]')];
 const formatButtons = [...document.querySelectorAll('[data-format]')];
 const grid = document.getElementById('comparison-grid');
 const panel = document.getElementById('comparison-panel');
-const dialog = document.getElementById('image-dialog');
-let task = 'geneval', format = 'all', index = 0, lastFocus, dialogExample;
+const showLarge = createImageViewer(document.getElementById('image-dialog'), methods);
+let task = 'geneval', format = 'all', index = 0;
 function formatOf(row) { return row.width === row.height ? 'square' : row.width > row.height ? 'landscape' : 'portrait'; }
 function currentRows() { return examples.filter(row => row.reward === task && (format === 'all' || formatOf(row) === format)); }
-function currentExample() { return currentRows()[index]; }
 function dimensions(row) {
   let a = row.width, b = row.height;
   while (b) [a, b] = [b, a % b];
   return `${row.width} × ${row.height} · ${row.width / a}:${row.height / a} · Seed ${row.seed}`;
 }
-function showLarge(method, example = dialog.open ? dialogExample : currentExample()) {
-  if (!example) return;
-  dialogExample = example;
-  document.getElementById('dialog-title').textContent = method === 'Base' ? 'Base · SD3.5 Medium' : method;
-  document.getElementById('dialog-prompt').textContent = example.prompt;
-  const image = document.getElementById('dialog-image');
-  image.src = example.images[method]; image.alt = `${method}: ${example.prompt}`;
-  image.width = example.width; image.height = example.height;
-  document.querySelectorAll('.dialog-methods button').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.method === method)));
-  if (!dialog.open) { lastFocus = document.activeElement; dialog.showModal(); document.body.style.overflow = 'hidden'; }
-}
-methods.forEach(method => {
-  const button = document.createElement('button'); button.type = 'button'; button.textContent = method; button.dataset.method = method;
-  button.addEventListener('click', () => showLarge(method)); document.querySelector('.dialog-methods').append(button);
-});
 function render() {
   const rows = currentRows();
   index = Math.min(index, Math.max(0, rows.length - 1));
@@ -57,7 +42,9 @@ function render() {
     image.width = example.width; image.height = example.height; image.decoding = 'async'; image.loading = 'lazy';
     button.style.setProperty('--image-ratio', `${example.width} / ${example.height}`);
     const icon = document.createElement('span'); icon.className = 'zoom-icon'; icon.textContent = '↗'; icon.setAttribute('aria-hidden', 'true');
-    button.append(image, icon); button.addEventListener('click', () => showLarge(method)); figure.append(label, button); grid.append(figure);
+    button.append(image, icon);
+    button.addEventListener('click', () => showLarge(example, method, button.getBoundingClientRect()));
+    figure.append(label, button); grid.append(figure);
   });
   const thumbnails = document.getElementById('example-thumbnails'); thumbnails.replaceChildren();
   thumbnails.style.setProperty('--thumbnail-count', Math.min(5, rows.length));
@@ -75,8 +62,8 @@ function prepareSphere() {
   const observer = new IntersectionObserver(entries => {
     if (!entries.some(entry => entry.isIntersecting)) return;
     observer.disconnect();
-    import('./gallery-sphere.js').then(({ createGallerySphere }) => {
-      createGallerySphere(stage, examples, row => showLarge('RiDEx', row));
+    import('./gallery-sphere.js?v=gallery2').then(({ createGallerySphere }) => {
+      createGallerySphere(stage, examples, (row, origin) => showLarge(row, 'RiDEx', origin));
     }).catch(() => {
       stage.dataset.state = 'error'; stage.setAttribute('aria-busy', 'false');
       document.getElementById('sphere-status').textContent = 'The gallery could not load. Please reload the page.';
@@ -107,9 +94,6 @@ formatButtons.forEach(button => button.addEventListener('click', () => {
 }));
 document.getElementById('previous-example').addEventListener('click', () => { const count = currentRows().length; if (count) { index = (index + count - 1) % count; render(); } });
 document.getElementById('next-example').addEventListener('click', () => { const count = currentRows().length; if (count) { index = (index + 1) % count; render(); } });
-document.getElementById('close-dialog').addEventListener('click', () => dialog.close());
-dialog.addEventListener('click', event => { const box = dialog.getBoundingClientRect(); if (event.target === dialog && (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom)) dialog.close(); });
-dialog.addEventListener('close', () => { document.body.style.overflow = ''; lastFocus?.focus(); });
 document.getElementById('copy-citation').addEventListener('click', async () => {
   const status = document.getElementById('copy-status');
   try { await navigator.clipboard.writeText(document.getElementById('bibtex').textContent); status.textContent = 'BibTeX copied.'; document.getElementById('copy-citation').textContent = 'Copied ✓'; setTimeout(() => { document.getElementById('copy-citation').textContent = 'Copy BibTeX ⧉'; }, 2200); }

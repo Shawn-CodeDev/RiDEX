@@ -25,6 +25,20 @@ def assert_canvas_pixels_changed(before, after):
     assert ImageChops.difference(first, second).getbbox(), "Sphere canvas pixels did not change"
 
 
+def expect_model(page, row, method):
+    page.wait_for_function(
+        """method => {
+            const dialog = document.getElementById('image-dialog');
+            return dialog.dataset.state === 'ready' && dialog.dataset.method === method;
+        }""", arg=method)
+    image = page.locator("#dialog-image")
+    assert image.get_attribute("src") == row["images"][method]
+    assert image.evaluate("(img) => [img.naturalWidth, img.naturalHeight]") == [row["width"], row["height"]]
+    assert page.locator("#dialog-title").inner_text() == row["title"]
+    assert page.locator(".dialog-methods button[aria-pressed='true']").inner_text() == method
+    return image
+
+
 def verify_viewport(browser, name, width, height, report, mobile=False):
     context = browser.new_context(
         viewport={"width": width, "height": height},
@@ -48,6 +62,10 @@ def verify_viewport(browser, name, width, height, report, mobile=False):
     expected_count = page.evaluate("window.RIDEX_EXAMPLES.length")
     assert stage.locator("canvas").count() == 1
     assert int(stage.get_attribute("data-loaded-count")) == expected_count
+    screenshot = Image.open(io.BytesIO(stage.locator("canvas").screenshot())).convert("RGB")
+    bounds = screenshot.getbbox()
+    assert bounds and 3 < bounds[0] < bounds[2] < screenshot.width - 3
+    assert 3 < bounds[1] < bounds[3] < screenshot.height - 3
     stage.locator("..").screenshot(path=str(OUTPUT / f"sphere_initial_{name}.png"))
 
     select = page.locator("#sphere-select")
@@ -108,9 +126,7 @@ def verify_viewport(browser, name, width, height, report, mobile=False):
         page.mouse.click(center_x, center_y)
     dialog = page.locator("#image-dialog")
     assert dialog.evaluate("element => element.open"), "Canvas center hit did not open the selected example"
-    image = page.locator("#dialog-image")
-    page.wait_for_function("img => img.complete && img.naturalWidth > 0", arg=image.element_handle())
-    assert image.get_attribute("src").endswith(row["images"]["RiDEx"])
+    expect_model(page, row, "RiDEx")
     page.locator("#close-dialog").click()
 
     # Reset and keyboard input should remain usable while reduced motion is enabled.
@@ -123,14 +139,19 @@ def verify_viewport(browser, name, width, height, report, mobile=False):
 
     page.locator("#sphere-open").click()
     assert dialog.evaluate("element => element.open")
-    page.wait_for_function("img => img.complete && img.naturalWidth > 0", arg=image.element_handle())
-    assert image.get_attribute("src").endswith(row["images"]["RiDEx"])
+    expect_model(page, row, "RiDEx")
+    rendered = []
+    media_box = page.locator(".dialog-media").bounding_box()
     for method in ("Base", "DiffusionNFT", "RiDEx"):
-        page.locator(".dialog-methods button").filter(has_text=method).click()
-        assert page.locator("#dialog-title").inner_text().startswith(method)
-        assert page.locator(".dialog-methods button[aria-pressed='true']").inner_text() == method
-        assert image.get_attribute("src").endswith(row["images"][method])
-        image.evaluate("image => image.decode()")
+        button = page.locator(".dialog-methods").get_by_role("button", name=method, exact=True)
+        (button.tap if mobile else button.click)()
+        rendered.append(expect_model(page, row, method).screenshot())
+        assert page.locator(".dialog-media").bounding_box() == media_box
+    for first, second in zip(rendered, rendered[1:] + rendered[:1]):
+        assert_canvas_pixels_changed(first, second)
+    page.keyboard.press("ArrowLeft")
+    expect_model(page, row, "DiffusionNFT")
+    dialog.screenshot(path=str(OUTPUT / f"viewer_{name}.png"))
     page.locator("#close-dialog").click()
     assert not dialog.evaluate("element => element.open")
 
@@ -147,7 +168,8 @@ def verify_viewport(browser, name, width, height, report, mobile=False):
                               "failed_assets": failed_responses})
     report["viewports"].append({"name": name, "width": width, "height": height, "overflow": overflow,
                                 "examples": expected_count, "touch": mobile, "canvas_drag": True,
-                                "canvas_center_open": True, "offscreen_frames_stopped": True})
+                                "canvas_center_open": True, "offscreen_frames_stopped": True,
+                                "distinct_viewer_images": 3})
     context.close()
 
 
@@ -181,10 +203,68 @@ def verify_auto_rotation(browser, report):
     box = canvas.bounding_box()
     page.mouse.click(box['x'] + box['width'] / 2, box['y'] + box['height'] / 2)
     assert page.locator('#image-dialog').evaluate('dialog => dialog.open')
-    assert page.locator('#dialog-image').get_attribute('src') == page.evaluate('window.RIDEX_EXAMPLES[14].images.RiDEx')
+    expect_model(page, page.evaluate('window.RIDEX_EXAMPLES[14]'), 'RiDEx')
+    page.locator('.dialog-methods button[data-method="Base"]').click()
+    expect_model(page, page.evaluate('window.RIDEX_EXAMPLES[14]'), 'Base')
+    page.wait_for_function('document.querySelectorAll(".dialog-images img").length === 1')
     page.locator('#close-dialog').click()
     report["auto_rotation"] = {"motion": "no-preference", "changes_before_pause": True, "stable_after_pause": True}
     context.close()
+
+
+def verify_delayed_image(browser, report):
+    context = browser.new_context(reduced_motion="reduce")
+    page = context.new_page()
+    page.goto(f"http://127.0.0.1:{SERVER.server_port}/", wait_until="domcontentloaded")
+    row = page.evaluate("window.RIDEX_EXAMPLES.at(-1)")
+    page.locator("#gallery-sphere").scroll_into_view_if_needed()
+    blocked = []
+    base_path = "**/" + row["images"]["Base"]
+    page.route(base_path, lambda route: blocked.append(route))
+    page.locator("#sphere-select").select_option(row["id"])
+    page.locator("#sphere-open").click()
+    expect_model(page, row, "RiDEx")
+    page.locator('.dialog-methods button[data-method="Base"]').click()
+    dialog = page.locator("#image-dialog")
+    assert dialog.get_attribute("data-state") == "loading"
+    assert dialog.get_attribute("data-method") == "RiDEx"
+    page.locator('.dialog-methods button[data-method="DiffusionNFT"]').click()
+    expect_model(page, row, "DiffusionNFT")
+    assert len(blocked) == 1
+    with page.expect_response("**/" + row["images"]["Base"]):
+        blocked.pop().continue_()
+    expect_model(page, row, "DiffusionNFT")
+
+    page.locator("#close-dialog").click()
+    row = page.evaluate("window.RIDEX_EXAMPLES.at(-2)")
+    page.locator("#sphere-select").select_option(row["id"])
+    page.locator("#sphere-open").click()
+    expect_model(page, row, "RiDEx")
+    path = "**/" + row["images"]["Base"]
+    page.route(path, lambda route: route.abort())
+    page.locator('.dialog-methods button[data-method="Base"]').click()
+    page.wait_for_function('document.querySelector("#image-dialog").dataset.state === "error"')
+    assert dialog.get_attribute("data-method") == "RiDEx"
+    assert page.locator(".dialog-status").is_visible()
+    page.unroute(path)
+    page.locator('.dialog-methods button[data-method="Base"]').click()
+    expect_model(page, row, "Base")
+
+    path = "**/" + row["images"]["DiffusionNFT"]
+    page.route(path, lambda route: blocked.append(route))
+    page.locator('.dialog-methods button[data-method="DiffusionNFT"]').click()
+    assert dialog.get_attribute("data-state") == "loading"
+    page.keyboard.press("Escape")
+    page.wait_for_function('document.activeElement.id === "sphere-open"')
+    with page.expect_response(path):
+        blocked.pop().continue_()
+    assert not dialog.evaluate("element => element.open")
+    assert page.locator("#dialog-image").count() == 0
+    context.close()
+    report["viewer_network"] = {
+        "late_result_ignored": True, "failed_request_retriable": True,
+        "close_during_load_restores_focus": True,
+    }
 
 
 def main():
@@ -215,9 +295,11 @@ def main():
                 verify_viewport(browser, "touchmobile390x844", 390, 844, report, mobile=True)
                 verify_viewport(browser, "small320x800", 320, 800, report)
                 verify_auto_rotation(browser, report)
+                verify_delayed_image(browser, report)
             finally:
                 browser.close()
         (OUTPUT / "gallery_sphere_report.json").write_text(json.dumps(report, indent=2) + "\n")
+        print("Gallery drag, tap, clipping, model switching and network checks passed.", flush=True)
     finally:
         SERVER.shutdown()
         SERVER.server_close()

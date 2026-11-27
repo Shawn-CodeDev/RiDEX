@@ -11,7 +11,8 @@ GitHub Pages serves the repository root at <https://gary.ac.cn/RiDEX/>. The entr
 | [assets/training_comparison.pdf](../assets/training_comparison.pdf) | Paper figure; the adjacent WebP files are its desktop and mobile previews |
 | [assets/fonts/](../assets/fonts/) | Self-hosted fonts and their OFL notices |
 | [assets/globe/](../assets/globe/) | Native-aspect 384-pixel gallery textures; full-resolution images remain unchanged |
-| [web/gallery-sphere.js](gallery-sphere.js) | Three.js sphere, mouse/touch rotation, keyboard navigation and image selection |
+| [web/gallery-sphere.js](gallery-sphere.js) | Three.js collage sphere, mouse/touch rotation, focus animation and image selection |
+| [web/image-viewer.js](image-viewer.js) | Full-resolution model comparison with decoded image transitions and load-error handling |
 | [web/vendor/](vendor/) | Self-hosted Three.js 0.180.0 and OrbitControls; license in `licenses/threejs.txt` |
 
 Serve the repository root over HTTP to preview the ES-module gallery:
@@ -25,7 +26,7 @@ Open <http://127.0.0.1:8000/>. Keep site links relative so the page works under 
 The sphere loads when approaching the gallery, with four concurrent thumbnail
 requests. Rotation pauses while dragging or viewing a full-resolution image;
 off-screen and hidden-tab rendering stops. Reduced-motion preferences disable
-automatic rotation. The native example selector and image viewer remain usable
+automatic rotation, inertial drag and viewer transitions. The native example selector and image viewer remain usable
 when WebGL is unavailable. No external CDN is needed.
 
 After adding examples, run `python web/prepare_globe.py` inside a compute-node

@@ -16,11 +16,11 @@
   <link rel="icon" type="image/svg+xml" href="web/favicon.svg">
   <link rel="preload" as="image" href="assets/hero-art.webp">
   <link rel="preload" as="font" type="font/ttf" href="assets/fonts/PlayfairDisplay-Italic.ttf" crossorigin>
-  <link rel="stylesheet" href="web/styles.css?v=sphere1">
+  <link rel="stylesheet" href="web/styles.css?v=gallery2">
   <link rel="stylesheet" href="web/hero.css">
-  <link rel="stylesheet" href="web/gallery-sphere.css">
+  <link rel="stylesheet" href="web/gallery-sphere.css?v=gallery2">
   <script src="assets/examples.js?v=5" defer></script>
-  <script src="web/script.js?v=sphere1" defer></script>
+  <script type="module" src="web/script.js?v=gallery2"></script>
   <script src="web/navigation.js" defer></script>
 </head>
 <body>
@@ -101,6 +101,17 @@
     </section>
   </main>
   <footer><a class="wordmark" href="#top">RiDEx<span>.</span></a><p>Reward-Informed Directional Exploration</p><a href="https://github.com/Shawn-CodeDev/RiDEX" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a></footer>
-  <dialog id="image-dialog" aria-labelledby="dialog-title"><div class="dialog-toolbar"><div><h2 id="dialog-title">RiDEx</h2><p id="dialog-prompt"></p></div><button class="icon-button" id="close-dialog" type="button" aria-label="Close enlarged image" title="Close">×</button></div><img id="dialog-image" alt="" width="1024" height="1024"><div class="dialog-methods" role="group" aria-label="Method for enlarged image"></div></dialog>
+  <dialog id="image-dialog" aria-labelledby="dialog-title">
+    <div class="dialog-toolbar">
+      <h2 id="dialog-title"></h2>
+      <button class="icon-button" id="close-dialog" type="button" aria-label="Close enlarged image" title="Close" autofocus>&times;</button>
+    </div>
+    <div class="dialog-methods" role="group" aria-label="Compare models"></div>
+    <div class="dialog-media" aria-busy="false">
+      <div class="dialog-images"></div>
+      <p class="dialog-status" role="status" hidden></p>
+    </div>
+    <p id="dialog-prompt"></p>
+  </dialog>
 </body>
 </html>

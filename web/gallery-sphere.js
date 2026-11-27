@@ -49,7 +49,7 @@ export function createGallerySphere(stage, examples, onOpen) {
   const controls = new OrbitControls(camera, canvas);
   controls.enableZoom = false;
   controls.enablePan = false;
-  controls.enableDamping = true;
+  controls.enableDamping = !reducedMotion.matches;
   controls.dampingFactor = 0.075;
   controls.rotateSpeed = 0.48;
   controls.autoRotateSpeed = 0.28;
@@ -59,28 +59,25 @@ export function createGallerySphere(stage, examples, onOpen) {
   const radius = 3.2;
   const cards = [];
   const borders = [];
-  const back = new THREE.Mesh(
-    new THREE.SphereGeometry(radius - 0.18, 48, 32),
-    new THREE.MeshBasicMaterial({ color: '#101512' }),
-  );
-  scene.add(back);
+  const emphasis = [];
   const borderGeometry = new THREE.PlaneGeometry(1, 1);
   const imageGeometry = new THREE.PlaneGeometry(1, 1);
   const goldenAngle = Math.PI * (3 - Math.sqrt(5));
   // Equal-area placement gives every image its own point on the sphere.
   examples.forEach((row, index) => {
-    const y = 1 - 2 * (index + 0.5) / examples.length;
+    const slot = examples.length === 40 ? (index * 17) % 40 : index;
+    const y = 1 - 2 * (slot + 0.5) / examples.length;
     const ring = Math.sqrt(1 - y * y);
-    const azimuth = index * goldenAngle;
+    const azimuth = slot * goldenAngle;
     const normal = new THREE.Vector3(Math.cos(azimuth) * ring, y, Math.sin(azimuth) * ring);
     const group = new THREE.Group();
     group.position.copy(normal).multiplyScalar(radius);
-    group.lookAt(normal.clone().multiplyScalar(radius + 1));
     const ratio = row.width / row.height;
-    const width = Math.sqrt(1.75 * ratio);
+    const width = Math.sqrt(3.8 * ratio);
     const height = width / ratio;
-    const border = new THREE.Mesh(borderGeometry, new THREE.MeshBasicMaterial({ color: '#3b4b40' }));
-    border.scale.set(width + 0.035, height + 0.035, 1);
+    const border = new THREE.Mesh(borderGeometry, new THREE.MeshBasicMaterial({ color: '#e1e9db', transparent: true, opacity: 0, depthWrite: false }));
+    border.scale.set(width + 0.04, height + 0.04, 1);
+    border.position.z = 0.006;
     const image = new THREE.Mesh(imageGeometry, new THREE.MeshBasicMaterial({ color: '#202a24' }));
     image.scale.set(width, height, 1);
     image.position.z = 0.008;
@@ -89,8 +86,11 @@ export function createGallerySphere(stage, examples, onOpen) {
     scene.add(group);
     cards.push(image);
     borders.push(border);
+    emphasis.push({ amount: 0, width, height });
   });
 
+  const halfWidth = Math.max(...emphasis.map(item => (item.width + 0.04) * 0.53));
+  const halfHeight = Math.max(...emphasis.map(item => (item.height + 0.04) * 0.53));
   let visible = false, suspended = false, disposed = false;
   let rotating = !reducedMotion.matches, frame = 0, lastTime = 0, frames = 0;
   let focusTween = null, settleUntil = 0, distance = 12;
@@ -120,16 +120,29 @@ export function createGallerySphere(stage, examples, onOpen) {
     lastTime = time;
     controls.autoRotate = rotating && !dragging && !focusTween;
     if (focusTween) {
-      const fraction = Math.min((time - focusTween.start) / 650, 1);
-      const amount = fraction * fraction * (3 - 2 * fraction);
+      const fraction = Math.min((time - focusTween.start) / focusTween.duration, 1);
+      const amount = fraction === 1 ? 1 : 1 - Math.pow(1 - fraction, 3) + 0.015 * Math.sin(fraction * Math.PI * 2) * (1 - fraction);
       const rotation = new THREE.Quaternion().slerpQuaternions(new THREE.Quaternion(), focusTween.rotation, amount);
       camera.position.copy(focusTween.from).applyQuaternion(rotation).setLength(distance);
       if (fraction === 1) focusTween = null;
     }
+    const blend = reducedMotion.matches ? 1 : 1 - Math.exp(-delta * 15);
+    let emphasisAnimating = false;
+    emphasis.forEach((item, index) => {
+      const target = index === hovered ? 1 : 0;
+      item.amount += (target - item.amount) * blend;
+      if (Math.abs(item.amount - target) > 0.002) emphasisAnimating = true;
+      const scale = 1 + item.amount * 0.035;
+      borders[index].scale.set((item.width + 0.04) * scale, (item.height + 0.04) * scale, 1);
+      borders[index].material.opacity = item.amount * 0.92;
+      cards[index].scale.set(item.width * scale, item.height * scale, 1);
+      cards[index].position.z = 0.008 + item.amount * 0.012;
+    });
     controls.update(delta);
+    for (const card of cards) card.parent.quaternion.copy(camera.quaternion);
     renderer.render(scene, camera);
     stage.dataset.frames = String(++frames);
-    if (rotating || dragging || focusTween || time < settleUntil) requestFrame();
+    if (rotating || dragging || focusTween || time < settleUntil || emphasisAnimating) requestFrame();
   }
   function resize() {
     const width = stage.clientWidth, height = stage.clientHeight;
@@ -137,34 +150,52 @@ export function createGallerySphere(stage, examples, onOpen) {
     camera.aspect = width / height;
     const vertical = THREE.MathUtils.degToRad(camera.fov / 2);
     const horizontal = Math.atan(Math.tan(vertical) * camera.aspect);
-    distance = (radius + 0.34) / Math.sin(Math.min(vertical, horizontal)) * 1.06;
+    // Fit the card edges as well as the sphere of card centers.
+    distance = Math.max(
+      radius / Math.sin(vertical) + halfHeight / Math.tan(vertical),
+      radius / Math.sin(horizontal) + halfWidth / Math.tan(horizontal),
+    ) * 1.025;
     if (camera.position.length() < 2) camera.position.copy(startDirection);
     camera.position.setLength(distance);
     camera.updateProjectionMatrix();
     renderer.setSize(width, height, false);
     requestFrame();
   }
-  function face(index) {
+  function moveTo(direction) {
     pause();
     controls.update();
-    const target = cards[index].parent.position.clone().normalize();
     const from = camera.position.clone().normalize();
+    const target = direction.clone().normalize();
     if (reducedMotion.matches) camera.position.copy(target).multiplyScalar(distance);
-    else focusTween = { from, rotation: new THREE.Quaternion().setFromUnitVectors(from, target), start: performance.now() };
+    else focusTween = { from, rotation: new THREE.Quaternion().setFromUnitVectors(from, target), start: performance.now(), duration: 780 };
     requestFrame();
+  }
+  function face(index) { moveTo(cards[index].parent.position); }
+  function originRect(index) {
+    const image = cards[index];
+    image.updateWorldMatrix(true, false);
+    const canvasBox = canvas.getBoundingClientRect();
+    const corners = [
+      new THREE.Vector3(-0.5, -0.5, 0), new THREE.Vector3(0.5, -0.5, 0),
+      new THREE.Vector3(-0.5, 0.5, 0), new THREE.Vector3(0.5, 0.5, 0),
+    ].map(point => {
+      const projected = point.applyMatrix4(image.matrixWorld).project(camera);
+      return { x: canvasBox.left + (projected.x + 1) * canvasBox.width / 2, y: canvasBox.top + (1 - projected.y) * canvasBox.height / 2 };
+    });
+    const xs = corners.map(point => point.x), ys = corners.map(point => point.y);
+    const left = Math.min(...xs), top = Math.min(...ys);
+    return { left, top, width: Math.max(...xs) - left, height: Math.max(...ys) - top };
   }
   function hit(event) {
     const box = canvas.getBoundingClientRect();
     pointer.set((event.clientX - box.left) / box.width * 2 - 1, -(event.clientY - box.top) / box.height * 2 + 1);
     raycaster.setFromCamera(pointer, camera);
-    const hits = raycaster.intersectObjects([...cards, back], false);
-    return hits.length && hits[0].object !== back ? hits[0].object.userData.index : -1;
+    const hits = raycaster.intersectObjects(cards, false);
+    return hits.length ? hits[0].object.userData.index : -1;
   }
   function highlight(index) {
     if (hovered === index) return;
-    if (hovered !== -1) borders[hovered].material.color.set('#3b4b40');
     hovered = index;
-    if (index !== -1) borders[index].material.color.set('#d9e5d2');
     requestFrame();
   }
   function stop() {
@@ -176,7 +207,11 @@ export function createGallerySphere(stage, examples, onOpen) {
   toggle.disabled = reset.disabled = false;
   toggle.addEventListener('click', () => { rotating = !rotating; updateToggle(); requestFrame(); });
   reset.addEventListener('click', () => {
-    pause(); focusTween = null; controls.reset(); camera.position.copy(startDirection).multiplyScalar(distance); requestFrame();
+    const currentPosition = camera.position.clone();
+    focusTween = null;
+    controls.reset();
+    camera.position.copy(currentPosition);
+    moveTo(startDirection);
   });
   select.addEventListener('change', () => face(selected));
   controls.addEventListener('start', () => { pause(); focusTween = null; dragging = true; tooltip.hidden = true; requestFrame(); });
@@ -203,7 +238,7 @@ export function createGallerySphere(stage, examples, onOpen) {
     if (event.pointerId !== activePointer) return;
     if (down && moved < 7) {
       const index = hit(event);
-      if (index !== -1) { selectItem(index); canvas.focus({ preventScroll: true }); onOpen(examples[index]); }
+      if (index !== -1) { selectItem(index); canvas.focus({ preventScroll: true }); onOpen(examples[index], originRect(index)); }
     }
     down = null; activePointer = null;
   });
@@ -240,7 +275,11 @@ export function createGallerySphere(stage, examples, onOpen) {
   });
   modalObserver.observe(document.getElementById('image-dialog'), { attributes: true, attributeFilter: ['open'] });
   document.addEventListener('visibilitychange', () => document.hidden ? stop() : requestFrame());
-  reducedMotion.addEventListener('change', () => { if (reducedMotion.matches) pause(); requestFrame(); });
+  reducedMotion.addEventListener('change', () => {
+    controls.enableDamping = !reducedMotion.matches;
+    if (reducedMotion.matches) pause();
+    requestFrame();
+  });
   resize();
   controls.saveState();
 
@@ -281,7 +320,7 @@ export function createGallerySphere(stage, examples, onOpen) {
     controls.dispose();
     for (const card of cards) { card.material.map?.dispose(); card.material.dispose(); }
     for (const border of borders) border.material.dispose();
-    imageGeometry.dispose(); borderGeometry.dispose(); back.geometry.dispose(); back.material.dispose(); renderer.dispose();
+    imageGeometry.dispose(); borderGeometry.dispose(); renderer.dispose();
   });
   window.addEventListener('pageshow', requestFrame);
 }
